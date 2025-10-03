@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP 8.5 Release</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --php-purple: #8892BF;
+            --php-dark: #4F5B93;
+            --bg-light: #FFFFFF;
+            --bg-subtle: #F8F9FA;
+            --text-primary: #1A1A1A;
+            --text-secondary: #4A4A4A;
+            --border-color: #E5E7EB;
+            --accent: #8892BF;
+            --code-bg: #F1F3F5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: var(--php-dark);
+            color: white;
+            padding: 1rem 0;
+            border-bottom: 4px solid var(--php-purple);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--php-dark) 0%, var(--php-purple) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--php-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Release Info Bar */
+        .release-info {
+            background: var(--bg-subtle);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .info-item strong {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(136, 146, 191, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--php-dark), var(--php-purple));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .feature-code {
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Timeline Section */
+        .timeline {
+            padding: 4rem 0;
+            background: var(--bg-subtle);
+        }
+
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 1.5rem;
+            top: 3rem;
+            width: 2px;
+            height: calc(100% + 2rem);
+            background: var(--border-color);
+        }
+
+        .timeline-date {
+            min-width: 8rem;
+            text-align: right;
+            padding-top: 0.5rem;
+        }
+
+        .timeline-date strong {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-date span {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 1.25rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg-subtle);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Migration Guide */
+        .migration {
+            padding: 4rem 0;
+        }
+
+        .guide-card {
+            background: var(--bg-subtle);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .guide-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .guide-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .guide-card li {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .guide-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--php-dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .timeline-date {
+                text-align: left;
+            }
+
+            .timeline-item::after {
+                display: none;
+            }
+
+            .timeline-dot {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">php.net</a>
+                <nav>
+                    <a href="#features">Features</a>
+                    <a href="#timeline">Timeline</a>
+                    <a href="#migration">Migration</a>
+                    <a href="#downloads">Downloads</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="version-badge">New Release</div>
+            <h1>PHP 8.5</h1>
+            <p>Refined developer experience with new utility functions, enhanced debugging, and modern syntax improvements</p>
+            <div class="cta-buttons">
+                <a href="#downloads" class="btn btn-primary">Download PHP 8.5</a>
+                <a href="#migration" class="btn btn-secondary">Migration Guide</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="release-info">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Release Date</strong>
+                    <span>November 20, 2025</span>
+                </div>
+                <div class="info-item">
+                    <strong>Support Until</strong>
+                    <span>November 2027</span>
+                </div>
+                <div class="info-item">
+                    <strong>Security Fixes Until</strong>
+                    <span>November 2028</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>What's New in PHP 8.5</h2>
+                <p>Developer-centric improvements focusing on readability, safety, and modern syntax</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">|&gt;</div>
+                    <h3>Pipe Operator</h3>
+                    <p>Chain function calls naturally with the new pipe operator for cleaner, more readable code.</p>
+                    <div class="feature-code">$result = $input
+  |&gt; trim(...)
+  |&gt; strtolower(...)
+  |&gt; ucfirst(...);</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">[]</div>
+                    <h3>Array First & Last</h3>
+                    <p>New utility functions to retrieve the first and last elements of arrays without verbose workarounds.</p>
+                    <div class="feature-code">$first = array_first($array);
+$last = array_last($array);</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fatal Error Backtraces</h3>
+                    <p>Stack traces now available for fatal errors, making debugging catastrophic failures much easier.</p>
+                    <div class="feature-code">// Better error context
+// for fatal errors</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Error Handler Introspection</h3>
+                    <p>New functions to retrieve currently set error and exception handlers programmatically.</p>
+                    <div class="feature-code">$handler = get_error_handler();
+$exc = get_exception_handler();</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>RTL Locale Detection</h3>
+                    <p>Built-in support for detecting right-to-left locales with new Intl functions.</p>
+                    <div class="feature-code">$isRTL = locale_is_right_to_left('ar');
+// Locale::isRightToLeft()</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>IntlListFormatter</h3>
+                    <p>Format lists according to locale conventions with the new IntlListFormatter class.</p>
+                    <div class="feature-code">// Format lists by locale
+// e.g., "A, B, and C"</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Memory Limit Ceiling</h3>
+                    <p>New max_memory_limit INI directive to set an upper boundary for memory_limit adjustments.</p>
+                    <div class="feature-code">max_memory_limit = 512M</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>CLI INI Diff</h3>
+                    <p>Quickly see non-default INI directives with the new --ini=diff CLI option.</p>
+                    <div class="feature-code">php --ini=diff</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Build Date Constant</h3>
+                    <p>New PHP_BUILD_DATE constant for determining when PHP was compiled.</p>
+                    <div class="feature-code">echo PHP_BUILD_DATE;</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="timeline">
+        <div class="container">
+            <div class="section-header">
+                <h2>Release Timeline</h2>
+                <p>PHP 8.5 development and support schedule</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <strong>Nov 2025</strong>
+                        <span>GA Release</span>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-dot"></div>
+                        <h3>General Availability</h3>
+                        <p>PHP 8.5.0 released with all new features and improvements.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <strong>Nov 2027</strong>
+                        <span>End of Active Support</span>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-dot"></div>
+                        <h3>Active Support Ends</h3>
+                        <p>Bug fixes and general maintenance will cease. Security fixes only.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <strong>Nov 2028</strong>
+                        <span>End of Life</span>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-dot"></div>
+                        <h3>Security Support Ends</h3>
+                        <p>PHP 8.5 reaches end of life. Please upgrade to a newer version.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="migration" class="migration">
+        <div class="container">
+            <div class="section-header">
+                <h2>Migration Guide</h2>
+                <p>Upgrading to PHP 8.5 from earlier versions</p>
+            </div>
+
+            <div class="guide-card">
+                <h3>🎯 New Features to Explore</h3>
+                <ul>
+                    <li>Start using the pipe operator for cleaner function chaining</li>
+                    <li>Replace verbose array access with array_first() and array_last()</li>
+                    <li>Leverage improved error debugging with fatal error backtraces</li>
+                    <li>Use new handler introspection functions for better error management</li>
+                    <li>Implement RTL detection for internationalized applications</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <h3>⚠️ Deprecations</h3>
+                <ul>
+                    <li>Review deprecated features from PHP 8.4 that may be removed</li>
+                    <li>Check for warnings in your error logs during testing</li>
+                    <li>Plan to update code using deprecated functionality</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <h3>✅ Testing Your Application</h3>
+                <ul>
+                    <li>Run your test suite with PHP 8.5 in a staging environment</li>
+                    <li>Enable error reporting to catch any deprecation notices</li>
+                    <li>Update dependencies to versions compatible with PHP 8.5</li>
+                    <li>Review release notes for breaking changes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="downloads" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get PHP 8.5</h2>
+                <p>Download PHP 8.5 for your platform</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Source Code</h3>
+                    <p>Compile PHP 8.5 from source for maximum flexibility and customization.</p>
+                    <a href="#" class="btn btn-primary" style="margin-top: 1rem;">Download Source</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Windows</h3>
+                    <p>Pre-built binaries for Windows, including thread-safe and non-thread-safe versions.</p>
+                    <a href="#" class="btn btn-primary" style="margin-top: 1rem;">Download for Windows</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Docker Images</h3>
+                    <p>Official PHP 8.5 Docker images for containerized deployments.</p>
+                    <a href="#" class="btn btn-primary" style="margin-top: 1rem;">View on Docker Hub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PHP 8.5</h4>
+                    <a href="#features">Features</a>
+                    <a href="#timeline">Timeline</a>
+                    <a href="#migration">Migration Guide</a>
+                    <a href="#downloads">Downloads</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <a href="#">Manual</a>
+                    <a href="#">Release Notes</a>
+                    <a href="#">Changelog</a>
+                    <a href="#">RFC Archive</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <a href="#">Mailing Lists</a>
+                    <a href="#">User Groups</a>
+                    <a href="#">Conferences</a>
+                    <a href="#">Contribute</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Other Versions</h4>
+                    <a href="#">PHP 8.4</a>
+                    <a href="#">PHP 8.3</a>
+                    <a href="#">PHP 8.2</a>
+                    <a href="#">All Releases</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright © 2001-2025 The PHP Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

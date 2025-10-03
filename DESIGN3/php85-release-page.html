@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP 8.5 — Unleashed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --php-electric: #A78BFA;
+            --php-deep: #1E1B4B;
+            --php-neon: #C084FC;
+            --cyber-cyan: #22D3EE;
+            --cyber-pink: #F472B6;
+            --volt-yellow: #FDE047;
+            --obsidian: #0F0F23;
+            --slate: #1E293B;
+            --ghost: #F8FAFC;
+            --mist: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--obsidian);
+            color: var(--ghost);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Grid */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(167, 139, 250, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(167, 139, 250, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+        }
+
+        /* Navigation - Minimal Floating */
+        nav {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(30, 27, 75, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            border-radius: 3rem;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-weight: 800;
+            font-size: 1rem;
+            background: linear-gradient(135deg, var(--php-electric), var(--cyber-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav a {
+            color: rgba(248, 250, 252, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--php-electric);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Hero - Full Viewport Immersive */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--php-electric) 0%, transparent 70%);
+            opacity: 0.15;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(80px);
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+        }
+
+        .version-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .version-pill::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cyber-cyan);
+            box-shadow: 0 0 10px var(--cyber-cyan);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, white 0%, var(--php-electric) 50%, var(--cyber-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(167, 139, 250, 0.5);
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            font-weight: 300;
+            color: rgba(248, 250, 252, 0.8);
+            margin-bottom: 3rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1.25rem 3rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--php-electric), var(--cyber-cyan));
+            color: var(--obsidian);
+            box-shadow: 0 0 40px rgba(167, 139, 250, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 60px rgba(167, 139, 250, 0.7);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(167, 139, 250, 0.5);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(167, 139, 250, 0.1);
+            border-color: var(--php-electric);
+            box-shadow: 0 0 30px rgba(167, 139, 250, 0.3);
+        }
+
+        /* Scroll Indicator */
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(248, 250, 252, 0.4);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-hint::after {
+            content: '';
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, var(--php-electric), transparent);
+            animation: scrollFloat 2s infinite;
+        }
+
+        @keyframes scrollFloat {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(10px); opacity: 0.3; }
+        }
+
+        /* Stats - Bento Grid Style */
+        .stats {
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.1);
+            border-radius: 2rem;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--php-electric), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(167, 139, 250, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(167, 139, 250, 0.2);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, white, var(--php-electric));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(248, 250, 252, 0.5);
+            font-weight: 700;
+        }
+
+        /* Features - Diagonal Cards */
+        .features {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 6rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--cyber-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, white, var(--php-electric));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: rgba(248, 250, 252, 0.6);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.1);
+            border-radius: 2rem;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--php-electric), var(--cyber-cyan));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) rotate(0.5deg);
+            border-color: rgba(167, 139, 250, 0.4);
+            box-shadow: 0 30px 80px rgba(167, 139, 250, 0.3);
+        }
+
+        .feature-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, var(--php-electric), var(--cyber-cyan));
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.4);
+        }
+
+        .feature-card h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: rgba(248, 250, 252, 0.7);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-code {
+            background: rgba(15, 15, 35, 0.8);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-keyword { color: var(--php-electric); font-weight: 600; }
+        .code-operator { color: var(--cyber-cyan); font-weight: 700; }
+        .code-string { color: var(--cyber-pink); }
+        .code-comment { color: rgba(248, 250, 252, 0.4); font-style: italic; }
+
+        /* Timeline - Vertical with Glow */
+        .timeline {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-track {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 3rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--php-electric), var(--cyber-cyan));
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--php-electric);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            position: relative;
+            box-shadow: 0 0 40px rgba(167, 139, 250, 0.5);
+        }
+
+        .timeline-marker::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            border: 1px solid rgba(167, 139, 250, 0.2);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.1);
+            border-radius: 2rem;
+            padding: 2.5rem;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--cyber-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: rgba(248, 250, 252, 0.7);
+            line-height: 1.7;
+        }
+
+        /* CTA - Explosive */
+        .cta {
+            padding: 10rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, var(--php-deep) 0%, var(--obsidian) 100%);
+        }
+
+        .cta-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--php-electric) 0%, transparent 70%);
+            opacity: 0.2;
+            top: 20%;
+            left: 10%;
+            filter: blur(100px);
+        }
+
+        .cta-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--cyber-cyan) 0%, transparent 70%);
+            opacity: 0.15;
+            bottom: 20%;
+            right: 10%;
+            filter: blur(100px);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, white, var(--php-electric), var(--cyber-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            font-size: 1.5rem;
+            color: rgba(248, 250, 252, 0.7);
+            margin-bottom: 4rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 15, 35, 0.8);
+            border-top: 1px solid rgba(167, 139, 250, 0.1);
+            padding: 6rem 2rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, white, var(--php-electric));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-brand p {
+            color: rgba(248, 250, 252, 0.5);
+            line-height: 1.7;
+            max-width: 350px;
+        }
+
+        .footer-section h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(248, 250, 252, 0.4);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(248, 250, 252, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            font-size: 0.9375rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--php-electric);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(167, 139, 250, 0.1);
+            text-align: center;
+            color: rgba(248, 250, 252, 0.4);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 0.75rem 1rem;
+                gap: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav a {
+                display: none;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+            .timeline-marker {
+                margin: 0 auto;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <nav>
+        <div class="logo">PHP</div>
+        <a href="#features">Features</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#download">Download</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <div class="version-pill">
+                <span>New Release Available</span>
+            </div>
+            <h1>8.5</h1>
+            <p class="hero-tagline">The future of PHP starts now. Faster. Cleaner. Powerful.</p>
+            <div class="hero-cta">
+                <a href="#download" class="btn btn-primary">Get Started</a>
+                <a href="#features" class="btn btn-ghost">Explore Features</a>
+            </div>
+        </div>
+        <div class="scroll-hint">Scroll</div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">Nov 2025</div>
+                <div class="stat-label">Release Date</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24 Months</div>
+                <div class="stat-label">Active Support</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">36 Months</div>
+                <div class="stat-label">Security Fixes</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="section-header">
+            <div class="section-eyebrow">Innovations</div>
+            <h2 class="section-title">What's New</h2>
+            <p class="section-subtitle">PHP 8.5 introduces game-changing features that revolutionize how you write modern PHP applications.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">|&gt;</div>
+                <h3>Pipe Operator</h3>
+                <p>Transform your code with elegant function chaining. The pipe operator brings functional programming paradigms to PHP.</p>
+                <div class="feature-code"><span class="code-keyword">$result</span> = <span class="code-keyword">$input</span>
+  <span class="code-operator">|></span> trim(...)
+  <span class="code-operator">|></span> strtolower(...)
+  <span class="code-operator">|></span> ucfirst(...);</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">[]</div>
+                <h3>Array Utilities</h3>
+                <p>Access array boundaries effortlessly with new dedicated functions designed for modern workflows.</p>
+                <div class="feature-code"><span class="code-keyword">$first</span> = <span class="code-keyword">array_first</span>(<span class="code-keyword">$data</span>);
+<span class="code-keyword">$last</span> = <span class="code-keyword">array_last</span>(<span class="code-keyword">$data</span>);</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fatal Error Traces</h3>
+                <p>Debug with confidence. Stack traces now available for fatal errors, eliminating debugging blind spots.</p>
+                <div class="feature-code"><span class="code-comment">// Complete stack context
+// for every fatal error</span></div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Handler Introspection</h3>
+                <p>Gain programmatic access to error and exception handlers for advanced error management systems.</p>
+                <div class="feature-code"><span class="code-keyword">$error</span> = <span class="code-keyword">get_error_handler</span>();
+<span class="code-keyword">$exception</span> = <span class="code-keyword">get_exception_handler</span>();</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>RTL Detection</h3>
+                <p>Built-in internationalization support with native right-to-left locale detection capabilities.</p>
+                <div class="feature-code"><span class="code-keyword">$isRTL</span> = <span class="code-keyword">locale_is_right_to_left</span>(<span class="code-string">'ar'</span>);
+<span class="code-comment">// Locale::isRightToLeft()</span></div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3>Memory Ceiling</h3>
+                <p>Set absolute memory boundaries with max_memory_limit for enhanced resource management and security.</p>
+                <div class="feature-code">max_memory_limit = 512M</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="timeline">
+        <div class="section-header">
+            <div class="section-eyebrow">Roadmap</div>
+            <h2 class="section-title">Support Timeline</h2>
+            <p class="section-subtitle">Long-term support commitment for enterprise-grade stability and security.</p>
+        </div>
+
+        <div class="timeline-track">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item">
+                <div class="timeline-marker">01</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">November 20, 2025</div>
+                    <h3>General Availability</h3>
+                    <p>PHP 8.5.0 released to production with full feature set, comprehensive documentation, and migration guides.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker">02</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">November 2027</div>
+                    <h3>Active Support Ends</h3>
+                    <p>Transition to security-only updates. Bug fixes and general maintenance conclude after two years.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker">03</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">November 2028</div>
+                    <h3>End of Life</h3>
+                    <p>Security support concludes. Migration to PHP 8.6+ strongly recommended for continued protection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="cta">
+        <div class="cta-bg"></div>
+        <div class="cta-glow-1"></div>
+        <div class="cta-glow-2"></div>
+        <div class="cta-content">
+            <h2>Ready to Evolve?</h2>
+            <p>Download PHP 8.5 and experience the next generation of web development.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Download PHP 8.5</a>
+                <a href="#" class="btn btn-ghost">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>php.net</h3>
+                <p>A popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic, PHP powers everything from your blog to the most popular websites in the world.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Releases</h4>
+                <a href="#">PHP 8.5</a>
+                <a href="#">PHP 8.4</a>
+                <a href="#">PHP 8.3</a>
+                <a href="#">PHP 8.2</a>
+                <a href="#">All Versions</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">Migration Guide</a>
+                <a href="#">RFC Archive</a>
+                <a href="#">Changelog</a>
+                <a href="#">Downloads</a>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <a href="#">Mailing Lists</a>
+                <a href="#">User Groups</a>
+                <a href="#">Conferences</a>
+                <a href="#">Contribute</a>
+                <a href="#">Get Involved</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2001-2025 The PHP Group. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

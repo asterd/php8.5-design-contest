@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP 8.5 — Evolution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --php-primary: #8892BF;
+            --php-deep: #2A2D4F;
+            --php-bright: #A0AADF;
+            --accent-cyan: #4ECDC4;
+            --accent-warm: #FF6B6B;
+            --text-dark: #0A0A0A;
+            --text-mid: #424242;
+            --text-light: #787878;
+            --bg-pure: #FFFFFF;
+            --bg-cool: #F5F7FA;
+            --border-subtle: #E8ECF1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-pure);
+            overflow-x: hidden;
+        }
+
+        /* Floating Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--php-primary);
+        }
+
+        nav a {
+            color: var(--text-mid);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--php-primary);
+        }
+
+        /* Hero - Asymmetric Split */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 5rem;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 2rem 4rem 4rem;
+            max-width: 650px;
+            margin-left: auto;
+        }
+
+        .version-mark {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--php-primary);
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .hero h1 .version {
+            display: block;
+            background: linear-gradient(135deg, var(--php-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text-mid);
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-hero {
+            padding: 1rem 2.5rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--php-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(136, 146, 191, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(136, 146, 191, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--border-subtle);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--php-primary);
+            color: var(--php-primary);
+        }
+
+        /* Hero Visual Side */
+        .hero-visual {
+            background: linear-gradient(135deg, #F5F7FA 0%, #E8ECF1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-code {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            position: relative;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .code-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .code-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: var(--border-subtle);
+        }
+
+        .code-dot:nth-child(1) { background: #FF5F57; }
+        .code-dot:nth-child(2) { background: #FFBD2E; }
+        .code-dot:nth-child(3) { background: #28CA42; }
+
+        .code-block {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .code-keyword { color: #8892BF; font-weight: 600; }
+        .code-operator { color: var(--accent-cyan); font-weight: 700; }
+        .code-string { color: #FF6B6B; }
+        .code-comment { color: var(--text-light); font-style: italic; }
+
+        /* Decorative Elements */
+        .visual-decoration {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--php-bright), var(--accent-cyan));
+            opacity: 0.1;
+        }
+
+        .deco-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .deco-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--php-deep);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .stats-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, white, var(--php-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        /* Features - Diagonal Grid */
+        .features {
+            padding: 8rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-intro {
+            max-width: 700px;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--php-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            font-size: 1.25rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            position: relative;
+            padding: 3rem;
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--php-primary), var(--accent-cyan));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(136, 146, 191, 0.15);
+        }
+
+        .feature:hover::before {
+            opacity: 1;
+        }
+
+        .feature-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--border-subtle), var(--bg-cool));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .feature p {
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-code-snippet {
+            background: var(--bg-cool);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            border-left: 4px solid var(--php-primary);
+            overflow-x: auto;
+        }
+
+        /* Timeline - Horizontal Scroll */
+        .timeline-section {
+            background: var(--bg-cool);
+            padding: 8rem 0;
+        }
+
+        .timeline-scroll {
+            overflow-x: auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .timeline-track {
+            display: flex;
+            gap: 2rem;
+            min-width: max-content;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline-card {
+            min-width: 300px;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            right: -2rem;
+            top: 50%;
+            width: 2rem;
+            height: 2px;
+            background: var(--border-subtle);
+        }
+
+        .timeline-card:last-child::after {
+            display: none;
+        }
+
+        .timeline-date {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--php-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timeline-phase {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-card p {
+            color: var(--text-mid);
+            line-height: 1.6;
+            font-size: 0.9375rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--php-deep) 0%, #1A1D3F 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--php-primary) 0%, transparent 70%);
+            opacity: 0.15;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            padding: 1.25rem 3rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--php-deep);
+        }
+
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-ghost:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 0.9375rem;
+        }
+
+        .footer-links h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            font-size: 0.9375rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content {
+                padding: 4rem 2rem;
+                margin: 0 auto;
+            }
+
+            .hero-visual {
+                min-height: 50vh;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                padding: 1rem 1.5rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .btn-hero {
+                text-align: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo">php<span>.net</span></a>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#timeline">Timeline</a>
+                <a href="#downloads">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="version-mark">New Release</div>
+            <h1>
+                PHP
+                <span class="version">8.5</span>
+            </h1>
+            <p class="hero-subtitle">Refined syntax. Enhanced debugging. Modern utilities. The evolution of PHP continues.</p>
+            <div class="hero-actions">
+                <a href="#downloads" class="btn-hero btn-primary">Download Now</a>
+                <a href="#features" class="btn-hero btn-outline">Explore Features</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="visual-decoration deco-1"></div>
+            <div class="visual-decoration deco-2"></div>
+            <div class="floating-code">
+                <div class="code-header">
+                    <div class="code-dot"></div>
+                    <div class="code-dot"></div>
+                    <div class="code-dot"></div>
+                </div>
+                <div class="code-block">
+<span class="code-comment">// The new pipe operator</span>
+<span class="code-keyword">$result</span> = <span class="code-keyword">$input</span>
+  <span class="code-operator">|></span> trim(...)
+  <span class="code-operator">|></span> strtolower(...)
+  <span class="code-operator">|></span> ucfirst(...);
+
+<span class="code-comment">// Array utilities</span>
+<span class="code-keyword">$first</span> = <span class="code-keyword">array_first</span>(<span class="code-keyword">$items</span>);
+<span class="code-keyword">$last</span> = <span class="code-keyword">array_last</span>(<span class="code-keyword">$items</span>);
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-bar">
+        <div class="stats-inner">
+            <div class="stat">
+                <div class="stat-value">Nov 2025</div>
+                <div class="stat-label">Release Date</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2 Years</div>
+                <div class="stat-label">Active Support</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">3 Years</div>
+                <div class="stat-label">Security Fixes</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="section-intro">
+            <div class="section-label">What's New</div>
+            <h2 class="section-title">Built for modern developers</h2>
+            <p class="section-desc">PHP 8.5 brings thoughtful improvements that enhance readability, debugging, and developer experience.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-number">01</div>
+                <h3>Pipe Operator</h3>
+                <p>Chain function calls naturally with the new pipe operator for cleaner, more readable code transformations.</p>
+                <div class="feature-code-snippet"><span class="code-keyword">$result</span> = <span class="code-keyword">$value</span>
+  <span class="code-operator">|></span> trim(...)
+  <span class="code-operator">|></span> strtolower(...);</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">02</div>
+                <h3>Array First & Last</h3>
+                <p>Simple utility functions to access array boundaries without verbose workarounds or edge case handling.</p>
+                <div class="feature-code-snippet"><span class="code-keyword">$first</span> = <span class="code-keyword">array_first</span>(<span class="code-keyword">$array</span>);
+<span class="code-keyword">$last</span> = <span class="code-keyword">array_last</span>(<span class="code-keyword">$array</span>);</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">03</div>
+                <h3>Fatal Error Backtraces</h3>
+                <p>Stack traces now included for fatal errors, making debugging catastrophic failures significantly easier.</p>
+                <div class="feature-code-snippet"><span class="code-comment">// Full stack trace context
+// for fatal errors</span></div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">04</div>
+                <h3>Handler Introspection</h3>
+                <p>Retrieve current error and exception handlers programmatically for better error management tooling.</p>
+                <div class="feature-code-snippet"><span class="code-keyword">$handler</span> = <span class="code-keyword">get_error_handler</span>();
+<span class="code-keyword">$exc</span> = <span class="code-keyword">get_exception_handler</span>();</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">05</div>
+                <h3>RTL Locale Detection</h3>
+                <p>Native support for detecting right-to-left writing systems with new internationalization functions.</p>
+                <div class="feature-code-snippet"><span class="code-keyword">$isRTL</span> = <span class="code-keyword">locale_is_right_to_left</span>(<span class="code-string">'ar'</span>);</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">06</div>
+                <h3>IntlListFormatter</h3>
+                <p>Format lists according to locale conventions with proper grammar and cultural specificity.</p>
+                <div class="feature-code-snippet"><span class="code-comment">// "A, B, and C" or
+// locale-specific format</span></div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">07</div>
+                <h3>Memory Limit Ceiling</h3>
+                <p>Set maximum boundaries for memory_limit with the new max_memory_limit INI directive for safer resource management.</p>
+                <div class="feature-code-snippet">max_memory_limit = 512M</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">08</div>
+                <h3>CLI INI Diff</h3>
+                <p>Quickly identify non-default configuration directives with the new CLI flag for faster debugging.</p>
+                <div class="feature-code-snippet">php --ini=diff</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-number">09</div>
+                <h3>Build Date Constant</h3>
+                <p>New PHP_BUILD_DATE constant provides build metadata for version tracking and deployment verification.</p>
+                <div class="feature-code-snippet"><span class="code-keyword">echo</span> PHP_BUILD_DATE;</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="timeline-section">
+        <div class="section-intro" style="padding: 0 2rem; max-width: 1400px; margin: 0 auto 4rem;">
+            <div class="section-label">Support Lifecycle</div>
+            <h2 class="section-title">Long-term commitment</h2>
+            <p class="section-desc">PHP 8.5 is supported with regular updates and security fixes following PHP's release cycle.</p>
+        </div>
+
+        <div class="timeline-scroll">
+            <div class="timeline-track">
+                <div class="timeline-card">
+                    <div class="timeline-date">Nov 20</div>
+                    <div class="timeline-phase">General Availability</div>
+                    <h3>PHP 8.5.0 Released</h3>
+                    <p>Production-ready release with all features and documentation complete.</p>
+                </div>
+
+                <div class="timeline-card">
+                    <div class="timeline-date">Nov 2027</div>
+                    <div class="timeline-phase">Active Support Ends</div>
+                    <h3>Bug Fixes Complete</h3>
+                    <p>General maintenance ends. Security updates continue for one more year.</p>
+                </div>
+
+                <div class="timeline-card">
+                    <div class="timeline-date">Nov 2028</div>
+                    <div class="timeline-phase">End of Life</div>
+                    <h3>Security Support Ends</h3>
+                    <p>PHP 8.5 reaches end of life. Upgrade to a newer version recommended.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="downloads" class="cta-section">
+        <div class="cta-glow"></div>
+        <div class="cta-content">
+            <h2>Ready to upgrade?</h2>
+            <p>Download PHP 8.5 for your platform and start using modern PHP features today.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-cta btn-light">Download PHP 8.5</a>
+                <a href="#" class="btn-cta btn-ghost">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">php.net</div>
+                <p class="footer-tagline">A popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Releases</h4>
+                <a href="#">PHP 8.5</a>
+                <a href="#">PHP 8.4</a>
+                <a href="#">PHP 8.3</a>
+                <a href="#">All Versions</a>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">Migration Guide</a>
+                <a href="#">RFC Archive</a>
+                <a href="#">Changelog</a>
+            </div>
+            <div class="footer-links">
+                <h4>Community</h4>
+                <a href="#">Mailing Lists</a>
+                <a href="#">Conferences</a>
+                <a href="#">Contribute</a>
+                <a href="#">Get Involved</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2001-2025 The PHP Group. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
