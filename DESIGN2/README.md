@@ -1,83 +1,92 @@
-🎨 Design Rationale — "Evolution"
-Innovazione Visiva
-Hero Split Asimmetrico
+🎨 Design Rationale — “Evolution”
 
-Layout a due colonne non convenzionale che rompe gli schemi tradizionali
-La tipografia massiva (fino a 6rem) con gradient sul numero di versione crea impatto immediato
-Il floating code block con effetto finestra macOS è elegante e funzionale
-Decorazioni circolari sfocate aggiungono profondità senza distrarre
+Visual Innovation
 
-Sistema Numerico Progressivo
+Asymmetric Hero Split
+	•	A two-column unconventional layout that breaks away from traditional patterns.
+	•	Massive typography (up to 6rem) with gradient applied to the version number for immediate impact.
+	•	Floating code block styled like a macOS window—elegant and functional.
+	•	Blurred circular decorations add depth without distraction.
 
-Ogni feature ha un numero gigante in gradient sottile (01-09)
-Crea gerarchia visiva e senso di progressione
-Numeri come elementi decorativi ma funzionali
+⸻
 
-Timeline Orizzontale Scorrevole
+Progressive Numbering System
+	•	Each feature has a giant number in a subtle gradient (01–09).
+	•	Establishes visual hierarchy and sense of progression.
+	•	Numbers serve as both decorative and functional elements.
 
-Innovativo rispetto alle classiche timeline verticali
-Scroll naturale su mobile, elegante su desktop
-Le card sono connesse visivamente con linee
+⸻
+
+Horizontal Scrollable Timeline
+	•	Innovative compared to the classic vertical timelines.
+	•	Natural scrolling on mobile, elegant experience on desktop.
+	•	Cards visually connected with lines for flow.
+
+⸻
 
 Gradient Border on Hover
+	•	Unique effect: borders become gradient only on hover using CSS mask.
+	•	Modern, sophisticated, and rarely seen.
 
-Effetto unico: il bordo diventa gradient solo all'hover usando CSS mask
-Moderno, sofisticato, non visto spesso
+⸻
 
-Eleganza Minimalista
-Palette Raffinata
+Minimalist Elegance
 
-PHP purple come base (#8892BF)
-Accent cyan (#4ECDC4) per contrasto vibrante ma equilibrato
-Background neutri e puliti
-Gradient sottili e sofisticati, mai eccessivi
+Refined Palette
+	•	PHP purple as the base (#8892BF).
+	•	Cyan accent (#4ECDC4) for vibrant yet balanced contrast.
+	•	Clean, neutral backgrounds.
+	•	Subtle, sophisticated gradients—never excessive.
 
-Tipografia Espressiva
+Expressive Typography
+	•	Variable font weights (400–800) for clear hierarchy.
+	•	Negative letter-spacing on large titles for modern appeal.
+	•	Fluid sizing system using clamp() for flawless responsiveness.
 
-Font-weight variabili (400-800) per gerarchie chiare
-Letter-spacing negativo sui titoli grandi per modernità
-Sistema di sizing fluido con clamp() per responsive perfetto
+Breathing Space
+	•	Generous padding (3rem, 4rem, 8rem).
+	•	Strategic white space application.
+	•	No visual overcrowding.
 
-Spazi Respirabili
+⸻
 
-Padding generosi (3rem, 4rem, 8rem)
-White space usato strategicamente
-Nessun affollamento visivo
+Exciting Details
 
-Dettagli Entusiasmanti
-Floating Header Glassmorphism
+Floating Glassmorphism Header
+	•	Fixed header with backdrop-blur for a glass effect.
+	•	Elegant, modern, and functional.
 
-Header fisso con backdrop-blur per effetto vetro
-Elegante, moderno, usabile
+Dark Stats Bar with Gradient Text
+	•	Dramatic contrast with the hero section.
+	•	Numbers in gradient create visual intrigue.
+	•	Immediate, readable information.
 
-Stats Bar Scuro con Gradient Text
+CTA Section with Glow Effect
+	•	Dark background with radial glow.
+	•	Captures attention without being intrusive.
+	•	Buttons that “breathe” on hover.
 
-Contrast drammatico con sezione hero
-Numeri in gradient creano interesse visivo
-Informazioni immediate e leggibili
+Refined Code Blocks
+	•	Minimalist syntax highlighting.
+	•	Colored border-left as a subtle accent.
+	•	Readable monospace font.
 
-CTA Section con Glow Effect
+⸻
 
-Background scuro con glow radiale
-Cattura l'attenzione senza essere invadente
-Bottoni che "respirano" all'hover
+Technical Innovations
+	•	CSS Mask for gradient borders—advanced animated border technique.
+	•	Backdrop Filter for modern glass effects in the header.
+	•	Grid Auto-fit for responsive layouts without complex media queries.
+	•	Cubic-bezier Timing for fluid, natural animations.
+	•	Text Gradient with Background-clip for premium typographic effects.
 
-Code Blocks Raffinati
+⸻
 
-Syntax highlighting minimalista
-Border-left colorato come accento
-Font monospace leggibile
+Why It’s Different
 
-Innovazioni Tecniche
+❌ Not: Traditional card grids, symmetric layouts, flat colors, or exaggerated animations.
+✅ Is: Innovative split layout, numbers as design elements, sophisticated palette, refined micro-interactions, horizontal timeline, intelligent gradients.
 
-CSS Mask per Gradient Borders - Tecnica avanzata per bordi animati
-Backdrop Filter - Effetto vetro moderno sul header
-Grid Auto-fit - Layout responsive senza media queries complesse
-Cubic-bezier Timing - Animazioni fluide e naturali
-Text Gradient con Background-clip - Effetti tipografici premium
-
-Perché È Diverso
-❌ Non è: Card grid tradizionale, layout simmetrico, colori flat, animazioni esagerate
-✅ È: Layout split innovativo, numeri come design element, palette sofisticata, micro-interazioni raffinate, timeline orizzontale, gradient intelligenti
-Questo design dice "PHP è evoluto" - moderno ma professionale, innovativo ma accessibile, entusiasmante ma elegante.
-Mobile-first completo, zero JavaScript, mantenibile, pronto per PHP 9.x con semplici modifiche ai gradient e numeri di versione. 🚀
+This design declares: “PHP has evolved.”
+Modern yet professional, innovative yet accessible, exciting yet elegant.
+Fully mobile-first, zero JavaScript, maintainable, ready for PHP 9.x with simple gradient and version number updates. 🚀
