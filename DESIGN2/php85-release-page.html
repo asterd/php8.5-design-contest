@@ -413,7 +413,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             opacity: 0.6;
         }
 
@@ -757,7 +757,96 @@
                 padding: 2rem 1.5rem;
             }
         }
+
+        /** CUSTOM HIGHLIGHT.js THEME */
+        /* ===== PHP Calm Light (hljs) ===== */
+        :root{
+            --hl-bg: #f7f8fa;
+            --hl-fg: #444444;
+            --hl-blue: #7a89b5;   /* keyword, types, yield, for, public, etc. */
+            --hl-green:#2ec451;   /* nomi classi/funzioni/identificatori */
+            --hl-pink: #ff7677;   /* stringhe */
+            --hl-num:  #9d9d9d;   /* numeri */
+            --hl-muted:#98a1b3;   /* commenti/secondary */
+        }
+
+        .hljs {
+            background: var(--hl-bg);
+            color: var(--hl-fg);
+            line-height: 1.55;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            tab-size: 4; -moz-tab-size: 4;
+        }
+
+        /* --- Colori principali --- */
+        .hljs-keyword,
+        .hljs-selector-tag,
+        .hljs-literal,
+        .hljs-type,
+        .hljs-built_in,
+        .hljs-symbol {
+            color: var(--hl-blue);
+            font-weight: 600;
+        }
+
+        .hljs-title,
+        .hljs-title.class_,
+        .hljs-title.function,
+        .hljs-function .hljs-title,
+        .hljs-property {            /* es. Calculator::subtract */
+            color: var(--hl-green);
+            font-weight: 600;
+        }
+
+        .hljs-string,
+        .hljs-meta .hljs-string,
+        .hljs-attr,
+        .hljs-attribute {
+            color: var(--hl-pink);
+        }
+
+        .hljs-number,
+        .hljs-literal.number {
+            color: var(--hl-num);
+        }
+
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-subst {
+            color: #3f5fa9;          /* variabili $name, $result */
+        }
+
+        /* Commenti / punt., default */
+        .hljs-comment { color: var(--hl-muted); font-style: italic; }
+        .hljs-punctuation,
+        .hljs-operator { color: var(--hl-fg); }
+
+        /* Inline <code class="hljs ..."> compatto (opzionale) */
+        code.hljs {
+            background: transparent !important;
+            display: inline-block;
+            padding: .2rem .4rem;
+            border-radius: 6px;
+        }
+
+        code {
+            font-family: 'Courier New', Consolas, Monaco, monospace !important;
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        pre code.hljs {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </head>
 <body>
 <header>
@@ -844,19 +933,23 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$components</span> = <span class="code-function">parse_url</span>(<span class="code-string">"https://php.net/releases/8.5/en.php"</span>);
+                <pre><code class="language-php">
+$components = parse_url("https://php.net/releases/8.5/en.php");
 
-                    <span class="code-function">var_dump</span>(<span class="code-keyword">$components</span>[<span class="code-string">'host'</span>]);
-                    <span class="code-comment">// string(7) "php.net"</span></div>
+var_dump($components['host']);
+// string(7) "php.net"
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">use</span> Uri\Rfc3986\Uri;
+                <pre><code class="language-php">
+use Uri\Rfc3986\Uri;
 
-                    <span class="code-keyword">$uri</span> = <span class="code-keyword">new</span> <span class="code-function">Uri</span>(<span class="code-string">"https://php.net/releases/8.5/en.php"</span>);
+$uri = new Uri("https://php.net/releases/8.5/en.php");
 
-                    <span class="code-function">var_dump</span>(<span class="code-keyword">$uri</span>-><span class="code-function">getHost</span>());
-                    <span class="code-comment">// string(7) "php.net"</span></div>
+var_dump($uri->getHost());
+// string(7) "php.net"
+                </code></pre>
             </div>
         </div>
     </div>
@@ -874,41 +967,45 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">final readonly class</span> <span class="code-function">PhpVersion</span> {
-                    <span class="code-keyword">public function</span> <span class="code-function">__construct</span>(
-                    <span class="code-keyword">public string</span> <span class="code-keyword">$version</span> = <span class="code-string">'PHP 8.4'</span>,
-                    ) {}
+                <pre><code class="language-php">
+final readonly class PhpVersion {
+    public function __construct(
+        public string $version = 'PHP 8.4',
+    ) {}
 
-                    <span class="code-keyword">public function</span> <span class="code-function">withVersion</span>(<span class="code-keyword">string</span> <span class="code-keyword">$version</span>) {
-                    <span class="code-keyword">return</span> <span class="code-keyword">clone</span>(<span class="code-keyword">$this</span>, [<span class="code-string">'version'</span> => <span class="code-keyword">$version</span>]);
-                    }
-                    }
+    public function withVersion(string $version) {
+        $newObject = clone $this;
+        $newObject->version = $version;
 
-                    <span class="code-keyword">$version</span> = <span class="code-keyword">new</span> <span class="code-function">PhpVersion</span>();
+        return $newObject;
+    }
+}
 
-                    <span class="code-function">var_dump</span>(
-                    <span class="code-keyword">$version</span>-><span class="code-function">withVersion</span>(<span class="code-string">'PHP 8.5'</span>),
-                    <span class="code-keyword">$version</span>-><span class="code-keyword">version</span>,
-                    );</div>
+var_dump(new PhpVersion()->withVersion('PHP 8.5'));
+// Fatal error: Uncaught Error:
+// Cannot modify readonly property PhpVersion::$version
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">final readonly class</span> <span class="code-function">PhpVersion</span> {
-                    <span class="code-keyword">public function</span> <span class="code-function">__construct</span>(
-                    <span class="code-keyword">public string</span> <span class="code-keyword">$version</span> = <span class="code-string">'PHP 8.4'</span>,
-                    ) {}
+                <pre><code class="language-php">
+final readonly class PhpVersion {
+    public function __construct(
+        public string $version = 'PHP 8.4',
+    ) {}
 
-                    <span class="code-keyword">public function</span> <span class="code-function">withVersion</span>(<span class="code-keyword">string</span> <span class="code-keyword">$version</span>) {
-                    <span class="code-keyword">return</span> <span class="code-keyword">clone</span>(<span class="code-keyword">$this</span>, [<span class="code-string">'version'</span> => <span class="code-keyword">$version</span>]);
-                    }
-                    }
+    public function withVersion(string $version) {
+        return clone($this, ['version' => $version]);
+    }
+}
 
-                    <span class="code-keyword">$version</span> = <span class="code-keyword">new</span> <span class="code-function">PhpVersion</span>();
+$version = new PhpVersion();
 
-                    <span class="code-function">var_dump</span>(
-                    <span class="code-keyword">$version</span>-><span class="code-function">withVersion</span>(<span class="code-string">'PHP 8.5'</span>),
-                    <span class="code-keyword">$version</span>-><span class="code-keyword">version</span>,
-                    );</div>
+var_dump(
+    $version->withVersion('PHP 8.5'),
+    $version->version,
+);
+                </code></pre>
             </div>
         </div>
     </div>
@@ -926,25 +1023,29 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$input</span> = <span class="code-string">' Some kind of string. '</span>;
+                <pre><code class="language-php">
+$input = ' Some kind of string. ';
 
-                    <span class="code-keyword">$output</span> = <span class="code-function">strtolower</span>(
-                    <span class="code-function">str_replace</span>([<span class="code-string">'.'</span>, <span class="code-string">'/'</span>, <span class="code-string">'…'</span>], <span class="code-string">''</span>,
-                    <span class="code-function">str_replace</span>(<span class="code-string">' '</span>, <span class="code-string">'-'</span>,
-                    <span class="code-function">trim</span>(<span class="code-keyword">$input</span>)
-                    )
-                    )
-                    );</div>
+$output = strtolower(
+    str_replace(['.', '/', '…'], '',
+        str_replace(' ', '-',
+            trim($input)
+        )
+    )
+);
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$input</span> = <span class="code-string">' Some kind of string. '</span>;
+                <pre><code class="language-php">
+$input = ' Some kind of string. ';
 
-                    <span class="code-keyword">$output</span> = <span class="code-keyword">$input</span>
-                    <span class="code-operator">|></span> <span class="code-function">trim</span>(...)
-                    <span class="code-operator">|></span> (<span class="code-keyword">fn</span> (<span class="code-keyword">string</span> <span class="code-keyword">$s</span>) => <span class="code-function">str_replace</span>(<span class="code-string">' '</span>, <span class="code-string">'-'</span>, <span class="code-keyword">$s</span>))
-                    <span class="code-operator">|></span> (<span class="code-keyword">fn</span> (<span class="code-keyword">string</span> <span class="code-keyword">$s</span>) => <span class="code-function">str_replace</span>([<span class="code-string">'.'</span>, <span class="code-string">'/'</span>, <span class="code-string">'…'</span>], <span class="code-string">''</span>, <span class="code-keyword">$s</span>))
-                    <span class="code-operator">|></span> <span class="code-function">strtolower</span>(...);</div>
+$output = $input
+    |> trim(...)
+    |> (fn (string $string) => str_replace(' ', '-', $string))
+    |> (fn (string $string) => str_replace(['.', '/', '…'], '', $string))
+    |> strtolower(...);
+                </code></pre>
             </div>
         </div>
     </div>
@@ -962,22 +1063,27 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">function</span> <span class="code-function">getPhpVersion</span>(): <span class="code-keyword">string</span> {
-                    <span class="code-keyword">return</span> <span class="code-string">'PHP 8.4'</span>;
-                    }
+                <pre><code class="language-php">
+function getPhpVersion(): string {
+    return 'PHP 8.4';
+}
 
-                    <span class="code-function">getPhpVersion</span>(); <span class="code-comment">// No Errors</span></div>
+getPhpVersion(); // No Errors
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet">#[\<span class="code-function">NoDiscard</span>]
-                    <span class="code-keyword">function</span> <span class="code-function">getPhpVersion</span>(): <span class="code-keyword">string</span> {
-                    <span class="code-keyword">return</span> <span class="code-string">'PHP 8.4'</span>;
-                    }
+                <pre><code class="language-php">
+#[\NoDiscard]
+function getPhpVersion(): string {
+    return 'PHP 8.4';
+}
 
-                    <span class="code-function">getPhpVersion</span>();
-                    <span class="code-comment">// Warning: The return value should be used
-// or intentionally ignored by casting as (void)</span></div>
+getPhpVersion();
+// Warning: The return value of function
+// getPhpVersion() should either be used or
+// intentionally ignored by casting it as (void)
+                </code></pre>
             </div>
         </div>
     </div>
@@ -996,46 +1102,57 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">final class</span> <span class="code-function">CalculatorTest</span> <span class="code-keyword">extends</span> \PHPUnit\Framework\TestCase
-                    {
-                    #[<span class="code-function">DataProvider</span>(<span class="code-string">'subtractionProvider'</span>)]
-                    <span class="code-keyword">public function</span> <span class="code-function">testSubtraction</span>(
-                    <span class="code-keyword">int</span> <span class="code-keyword">$minuend</span>, <span class="code-keyword">int</span> <span class="code-keyword">$subtrahend</span>, <span class="code-keyword">int</span> <span class="code-keyword">$result</span>
-                    ): <span class="code-keyword">void</span> {
-                    <span class="code-keyword">$this</span>-><span class="code-function">assertSame</span>(
-                    <span class="code-keyword">$result</span>,
-                    Calculator::<span class="code-function">subtract</span>(<span class="code-keyword">$minuend</span>, <span class="code-keyword">$subtrahend</span>)
-                    );
-                    }
+                <pre><code class="language-php">
+final class CalculatorTest extends \PHPUnit\Framework\TestCase
+{
+    #[DataProvider('subtractionProvider')]
+    public function testSubtraction(
+        int $minuend,
+        int $subtrahend,
+        int $result
+    ): void
+    {
+        $this->assertSame(
+            $result,
+            Calculator::subtract($minuend, $subtrahend)
+        );
+    }
 
-                    <span class="code-keyword">public static function</span> <span class="code-function">subtractionProvider</span>(): <span class="code-keyword">iterable</span> {
-                    <span class="code-keyword">for</span> (<span class="code-keyword">$i</span> = -10; <span class="code-keyword">$i</span> &lt;= 10; <span class="code-keyword">$i</span>++) {
-                    <span class="code-keyword">yield</span> [<span class="code-keyword">$i</span>, <span class="code-keyword">$i</span>, 0];
-                    <span class="code-keyword">yield</span> [<span class="code-keyword">$i</span>, 0, <span class="code-keyword">$i</span>];
-                    <span class="code-keyword">yield</span> [0, <span class="code-keyword">$i</span>, -<span class="code-keyword">$i</span>];
-                    }
-                    }
-                    }</div>
+    public static function subtractionProvider(): iterable
+    {
+        for ($i = -10; $i <= 10; $i++) {
+            yield [$i, $i, 0];
+            yield [$i, 0, $i];
+            yield [0, $i, -$i];
+        }
+    }
+}
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">final class</span> <span class="code-function">CalculatorTest</span>
-                    {
-                    #[Test\<span class="code-function">CaseGenerator</span>(<span class="code-keyword">static function</span> (): <span class="code-keyword">iterable</span> {
-                    <span class="code-keyword">for</span> (<span class="code-keyword">$i</span> = -10; <span class="code-keyword">$i</span> &lt;= 10; <span class="code-keyword">$i</span>++) {
-                    <span class="code-keyword">yield</span> [<span class="code-keyword">$i</span>, <span class="code-keyword">$i</span>, 0];
-                    <span class="code-keyword">yield</span> [<span class="code-keyword">$i</span>, 0, <span class="code-keyword">$i</span>];
-                    <span class="code-keyword">yield</span> [0, <span class="code-keyword">$i</span>, (<span class="code-keyword">$i</span> * -1)];
-                    }
-                    })]
-                    <span class="code-keyword">public function</span> <span class="code-function">testSubtraction</span>(
-                    <span class="code-keyword">int</span> <span class="code-keyword">$minuend</span>, <span class="code-keyword">int</span> <span class="code-keyword">$subtrahend</span>, <span class="code-keyword">int</span> <span class="code-keyword">$result</span>
-                    ) {
-                    \<span class="code-function">assert</span>(
-                    Calculator::<span class="code-function">subtract</span>(<span class="code-keyword">$minuend</span>, <span class="code-keyword">$subtrahend</span>) === <span class="code-keyword">$result</span>
-                    );
-                    }
-                    }</div>
+                <pre><code class="language-php">
+final class CalculatorTest
+{
+    #[Test\CaseGenerator(static function (): iterable {
+        for ($i = -10; $i <= 10; $i++) {
+            yield [$i, $i, 0];
+            yield [$i, 0, $i];
+            yield [0, $i, ($i * -1)];
+        }
+    })]
+    public function testSubtraction(
+        int $minuend,
+        int $subtrahend,
+        int $result
+    )
+    {
+        \assert(
+            Calculator::subtract($minuend, $subtrahend) === $result
+        );
+    }
+}
+                </code></pre>
             </div>
         </div>
     </div>
@@ -1053,39 +1170,44 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$sh</span> = <span class="code-function">curl_share_init</span>();
-                    <span class="code-function">curl_share_setopt</span>(<span class="code-keyword">$sh</span>, CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
-                    <span class="code-function">curl_share_setopt</span>(<span class="code-keyword">$sh</span>, CURLSHOPT_SHARE, CURL_LOCK_DATA_CONNECT);
+                <pre><code class="language-php">
+$sh = curl_share_init();
+curl_share_setopt($sh, CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
+curl_share_setopt($sh, CURLSHOPT_SHARE, CURL_LOCK_DATA_CONNECT);
 
-                    <span class="code-keyword">$ch1</span> = <span class="code-function">curl_init</span>(<span class="code-string">'https://php.net/'</span>);
-                    <span class="code-function">curl_setopt</span>(<span class="code-keyword">$ch1</span>, CURLOPT_SHARE, <span class="code-keyword">$sh</span>);
-                    <span class="code-function">curl_exec</span>(<span class="code-keyword">$ch1</span>);
+$ch1 = curl_init('https://php.net/');
+curl_setopt($ch1, CURLOPT_SHARE, $sh);
+curl_exec($ch1);
 
-                    <span class="code-keyword">$ch2</span> = <span class="code-function">curl_init</span>(<span class="code-string">'https://thephp.foundation/'</span>);
-                    <span class="code-function">curl_setopt</span>(<span class="code-keyword">$ch2</span>, CURLOPT_SHARE, <span class="code-keyword">$sh</span>);
-                    <span class="code-function">curl_exec</span>(<span class="code-keyword">$ch2</span>);
+$ch2 = curl_init('https://thephp.foundation/');
+curl_setopt($ch2, CURLOPT_SHARE, $sh);
+curl_exec($ch2);
 
-                    <span class="code-function">curl_share_close</span>(<span class="code-keyword">$sh</span>);
-                    <span class="code-function">curl_close</span>(<span class="code-keyword">$ch1</span>);
-                    <span class="code-function">curl_close</span>(<span class="code-keyword">$ch2</span>);</div>
+curl_share_close($sh);
+
+curl_close($ch1);
+curl_close($ch2);
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$sh</span> = <span class="code-function">curl_share_init_persistent</span>([
-                    CURL_LOCK_DATA_DNS,
-                    CURL_LOCK_DATA_CONNECT
-                    ]);
+                <pre><code class="language-php">
+$sh = curl_share_init_persistent([
+    CURL_LOCK_DATA_DNS,
+    CURL_LOCK_DATA_CONNECT
+]);
 
-                    <span class="code-keyword">$ch1</span> = <span class="code-function">curl_init</span>(<span class="code-string">'https://php.net/'</span>);
-                    <span class="code-function">curl_setopt</span>(<span class="code-keyword">$ch1</span>, CURLOPT_SHARE, <span class="code-keyword">$sh</span>);
-                    <span class="code-function">curl_exec</span>(<span class="code-keyword">$ch1</span>);
+$ch1 = curl_init('https://php.net/');
+curl_setopt($ch1, CURLOPT_SHARE, $sh);
+curl_exec($ch1);
 
-                    <span class="code-keyword">$ch2</span> = <span class="code-function">curl_init</span>(<span class="code-string">'https://thephp.foundation/'</span>);
-                    <span class="code-function">curl_setopt</span>(<span class="code-keyword">$ch2</span>, CURLOPT_SHARE, <span class="code-keyword">$sh</span>);
-                    <span class="code-function">curl_exec</span>(<span class="code-keyword">$ch2</span>);
+$ch2 = curl_init('https://thephp.foundation/');
+curl_setopt($ch2, CURLOPT_SHARE, $sh);
+curl_exec($ch2);
 
-                    <span class="code-function">curl_close</span>(<span class="code-keyword">$ch1</span>);
-                    <span class="code-function">curl_close</span>(<span class="code-keyword">$ch2</span>);</div>
+curl_close($ch1);
+curl_close($ch2);
+                </code></pre>
             </div>
         </div>
     </div>
@@ -1103,40 +1225,44 @@
         <div class="feature-comparison">
             <div class="comparison-side old">
                 <div class="comparison-label">PHP &lt; 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$php</span> = [
-                    <span class="code-string">'php-82'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'security'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.2'</span>],
-                    <span class="code-string">'php-83'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'active'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.3'</span>],
-                    <span class="code-string">'php-84'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'active'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.4'</span>],
-                    <span class="code-string">'php-85'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'upcoming'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.5'</span>],
-                    ];
+                <pre><code class="language-php">
+$php = [
+    'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
+    'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
+    'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
+    'php-85' => ['state' => 'upcoming', 'branch' => 'PHP-8.5'],
+];
 
-                    <span class="code-keyword">$upcomingRelease</span> = <span class="code-keyword">null</span>;
-                    <span class="code-keyword">foreach</span> (<span class="code-keyword">$php</span> <span class="code-keyword">as</span> <span class="code-keyword">$key</span> => <span class="code-keyword">$version</span>) {
-                    <span class="code-keyword">if</span> (<span class="code-keyword">$version</span>[<span class="code-string">'state'</span>] === <span class="code-string">'upcoming'</span>) {
-                    <span class="code-keyword">$upcomingRelease</span> = <span class="code-keyword">$version</span>;
-                    <span class="code-keyword">break</span>;
-                    }
-                    }
+$upcomingRelease = null;
+foreach ($php as $key => $version) {
+    if ($version['state'] === 'upcoming') {
+        $upcomingRelease = $version;
+        break;
+    }
+}
 
-                    <span class="code-function">var_dump</span>(<span class="code-keyword">$upcomingRelease</span>);</div>
+var_dump($upcomingRelease);
+                </code></pre>
             </div>
             <div class="comparison-side new">
                 <div class="comparison-label">PHP 8.5</div>
-                <div class="code-snippet"><span class="code-keyword">$php</span> = [
-                    <span class="code-string">'php-82'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'security'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.2'</span>],
-                    <span class="code-string">'php-83'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'active'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.3'</span>],
-                    <span class="code-string">'php-84'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'active'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.4'</span>],
-                    <span class="code-string">'php-85'</span> => [<span class="code-string">'state'</span> => <span class="code-string">'upcoming'</span>, <span class="code-string">'branch'</span> => <span class="code-string">'PHP-8.5'</span>],
-                    ];
+                <pre><code class="language-php">
+$php = [
+    'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
+    'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
+    'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
+    'php-85' => ['state' => 'upcoming', 'branch' => 'PHP-8.5'],
+];
 
-                    <span class="code-keyword">$upcomingRelease</span> = <span class="code-function">array_first</span>(
-                    <span class="code-function">array_filter</span>(
-                    <span class="code-keyword">$php</span>,
-                    <span class="code-keyword">static fn</span>(<span class="code-keyword">$v</span>) => <span class="code-keyword">$v</span>[<span class="code-string">'state'</span>] === <span class="code-string">'upcoming'</span>
-                    )
-                    );
+$upcomingRelease = array_first(
+    array_filter(
+        $php,
+        static fn($version) => $version['state'] === 'upcoming'
+    )
+);
 
-                    <span class="code-function">var_dump</span>(<span class="code-keyword">$upcomingRelease</span>);</div>
+var_dump($upcomingRelease);
+                </code></pre>
             </div>
         </div>
     </div>
