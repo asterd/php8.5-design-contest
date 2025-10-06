@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP 8.5 — Unleashed</title>
+    <title>PHP 8.5 – Unleashed</title>
     <style>
         * {
             margin: 0;
@@ -35,9 +35,9 @@
         .bg-grid {
             position: fixed;
             inset: 0;
-            background-image: 
-                linear-gradient(rgba(167, 139, 250, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(167, 139, 250, 0.03) 1px, transparent 1px);
+            background-image:
+                    linear-gradient(rgba(167, 139, 250, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(167, 139, 250, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index: 0;
         }
@@ -314,7 +314,7 @@
             font-weight: 700;
         }
 
-        /* Features - Diagonal Cards */
+        /* Features - Redesigned Layout */
         .features {
             padding: 8rem 2rem;
             position: relative;
@@ -358,7 +358,7 @@
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
@@ -430,7 +430,7 @@
             border-radius: 1rem;
             padding: 1.5rem;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.6;
             overflow-x: auto;
             position: relative;
@@ -441,6 +441,30 @@
         .code-operator { color: var(--cyber-cyan); font-weight: 700; }
         .code-string { color: var(--cyber-pink); }
         .code-comment { color: rgba(248, 250, 252, 0.4); font-style: italic; }
+
+        /* Comparison Arrow */
+        .comparison-arrow {
+            color: var(--php-electric);
+            font-size: 2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .code-label-old {
+            color: rgba(248, 250, 252, 0.5);
+        }
+
+        .code-label-new {
+            color: var(--cyber-cyan);
+        }
 
         /* Timeline - Vertical with Glow */
         .timeline {
@@ -674,10 +698,18 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 3rem;
             }
+
+            .feature-card {
+                padding: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
-            nav a {
+            nav a:not(.logo) {
                 display: none;
             }
 
@@ -692,10 +724,6 @@
             .btn {
                 width: 100%;
                 text-align: center;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
             }
 
             .timeline-item {
@@ -715,198 +743,759 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
+
+            .comparison-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
         }
+
+
+        /* ===========================================================
+           Highlight.js Theme — "Neon Night PHP" (dark / purple UI)
+           Designed to blend with dark cards, soft borders, neon accents.
+           Works best on dark backgrounds (#0e1224–#1a1f3c).
+           =========================================================== */
+
+        :root{
+            /* Base palette (tweak to fit your UI) */
+            --hljs-bg:        #151b34;   /* code block background (use transparent if card has its own) */
+            --hljs-fg:        #cfd6f9;   /* default foreground */
+            --hljs-border:    #2a3360;
+            --hljs-shadow:    rgba(18, 22, 45, .6);
+
+            /* Accent hues */
+            --hljs-cyan:      #7fd3ff;   /* keywords / types / builtins */
+            --hljs-green:     #67f2b2;   /* function / method / class names (emphasis) */
+            --hljs-purple:    #c59cff;   /* class & namespace identifiers */
+            --hljs-pink:      #ff85c9;   /* strings */
+            --hljs-teal:      #66e0de;   /* properties / attributes */
+            --hljs-number:    #a6dbff;   /* numbers / numeric literals */
+            --hljs-var:       #a5b4ff;   /* variables */
+            --hljs-operator:  #e5e9f7;   /* punctuation / operators */
+            --hljs-comment:   #8a90b3;   /* comments */
+        }
+
+        /* ---- Block container ---------------------------------------------------- */
+        .hljs {
+            /* background: var(--hljs-bg); */
+            color: var(--hljs-fg);
+            line-height: 1.55;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            /* border: 1px solid var(--hljs-border); */
+            box-shadow:
+                    0 10px 30px -10px var(--hljs-shadow),
+                    inset 0 0 0 1px rgba(255,255,255,0.02);
+            overflow-x: auto;
+            tab-size: 4; -moz-tab-size: 4;
+        }
+
+        /* Optional: for inline <code class="hljs"> */
+        code.hljs {
+            padding: .18rem .35rem;
+            border-radius: .5rem;
+        }
+
+        /* ---- Core tokens -------------------------------------------------------- */
+        .hljs-keyword,
+        .hljs-selector-tag,
+        .hljs-type,
+        .hljs-built_in,
+        .hljs-literal,
+        .hljs-meta .hljs-keyword {           /* e.g., <?php, ?> in PHP */
+            color: var(--hljs-cyan);
+            font-weight: 600;
+        }
+
+        .hljs-title.function,
+        .hljs-function .hljs-title,
+        .hljs-title.class_,
+        .hljs-title {                        /* fall back emphasis */
+            color: var(--hljs-green);
+            font-weight: 600;
+        }
+
+        .hljs-class .hljs-title,
+        .hljs-namespace,
+        .hljs-title.class_ {
+            color: var(--hljs-purple);
+        }
+
+        .hljs-string,
+        .hljs-meta .hljs-string {
+            color: var(--hljs-pink);
+        }
+
+        .hljs-number,
+        .hljs-literal.number,
+        .hljs-attr-value .hljs-number {
+            color: var(--hljs-number);
+        }
+
+        .hljs-attribute,
+        .hljs-attr,
+        .hljs-property,
+        .hljs-doctag {
+            color: var(--hljs-teal);
+        }
+
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-subst {
+            color: var(--hljs-var);
+        }
+
+        /* Operators & punctuation kept legible but softer than tokens */
+        .hljs-operator,
+        .hljs-punctuation,
+        .hljs-symbol {
+            color: var(--hljs-operator);
+        }
+
+        /* Comments */
+        .hljs-comment,
+        .hljs-quote {
+            color: var(--hljs-comment);
+            font-style: italic;
+        }
+
+        /* Annotations / attributes / metadata (e.g., PHP 8 attributes) */
+        .hljs-meta,
+        .hljs-meta .hljs-title {
+            color: var(--hljs-teal);
+        }
+
+        /* Emphasis utilities (rare) */
+        .hljs-emphasis { font-style: italic; }
+        .hljs-strong   { font-weight: 700; }
+
+        /* ---- PHP niceties ------------------------------------------------------- */
+        /* Make the leading PHP open/close tags feel keyword-y */
+        .language-php .hljs-meta,
+        .language-php .hljs-meta .hljs-keyword { color: var(--hljs-cyan); font-weight: 700; }
+
+        /* Static calls like ClassName::method */
+        .language-php .hljs-title,
+        .language-php .hljs-title.function { color: var(--hljs-green); }
+
+        /* Variables start with $ in PHP */
+        .language-php .hljs-variable { color: var(--hljs-var); }
+
+        /* Strings with interpolation stay vibrant */
+        .language-php .hljs-string { color: var(--hljs-pink); }
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </head>
 <body>
-    <div class="bg-grid"></div>
+<div class="bg-grid"></div>
 
-    <nav>
-        <div class="logo">PHP</div>
-        <a href="#features">Features</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#download">Download</a>
-    </nav>
+<nav>
+    <div class="logo">PHP</div>
+    <a href="#features">Features</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#download">Download</a>
+</nav>
 
-    <section class="hero">
-        <div class="hero-glow"></div>
-        <div class="hero-content">
-            <div class="version-pill">
-                <span>New Release Available</span>
-            </div>
-            <h1>8.5</h1>
-            <p class="hero-tagline">The future of PHP starts now. Faster. Cleaner. Powerful.</p>
-            <div class="hero-cta">
-                <a href="#download" class="btn btn-primary">Get Started</a>
-                <a href="#features" class="btn btn-ghost">Explore Features</a>
-            </div>
+<section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+        <div class="version-pill">
+            <span>New Release Available</span>
         </div>
-        <div class="scroll-hint">Scroll</div>
-    </section>
-
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">Nov 2025</div>
-                <div class="stat-label">Release Date</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">24 Months</div>
-                <div class="stat-label">Active Support</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">36 Months</div>
-                <div class="stat-label">Security Fixes</div>
-            </div>
+        <h1>8.5</h1>
+        <p class="hero-tagline">The future of PHP starts now. Faster. Cleaner. Powerful.</p>
+        <div class="hero-cta">
+            <a href="#download" class="btn btn-primary">Get Started</a>
+            <a href="#features" class="btn btn-ghost">Explore Features</a>
         </div>
-    </section>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+</section>
 
-    <section id="features" class="features">
-        <div class="section-header">
-            <div class="section-eyebrow">Innovations</div>
-            <h2 class="section-title">What's New</h2>
-            <p class="section-subtitle">PHP 8.5 introduces game-changing features that revolutionize how you write modern PHP applications.</p>
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">Nov 2025</div>
+            <div class="stat-label">Release Date</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-number">24 Months</div>
+            <div class="stat-label">Active Support</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">36 Months</div>
+            <div class="stat-label">Security Fixes</div>
+        </div>
+    </div>
+</section>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">|&gt;</div>
-                <h3>Pipe Operator</h3>
-                <p>Transform your code with elegant function chaining. The pipe operator brings functional programming paradigms to PHP.</p>
-                <div class="feature-code"><span class="code-keyword">$result</span> = <span class="code-keyword">$input</span>
-  <span class="code-operator">|></span> trim(...)
-  <span class="code-operator">|></span> strtolower(...)
-  <span class="code-operator">|></span> ucfirst(...);</div>
-            </div>
+<section id="features" class="features">
+    <div class="section-header">
+        <div class="section-eyebrow">Innovations</div>
+        <h2 class="section-title">What's New</h2>
+        <p class="section-subtitle">PHP 8.5 introduces game-changing features that revolutionize how you write modern PHP applications.</p>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">[]</div>
-                <h3>Array Utilities</h3>
-                <p>Access array boundaries effortlessly with new dedicated functions designed for modern workflows.</p>
-                <div class="feature-code"><span class="code-keyword">$first</span> = <span class="code-keyword">array_first</span>(<span class="code-keyword">$data</span>);
-<span class="code-keyword">$last</span> = <span class="code-keyword">array_last</span>(<span class="code-keyword">$data</span>);</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Fatal Error Traces</h3>
-                <p>Debug with confidence. Stack traces now available for fatal errors, eliminating debugging blind spots.</p>
-                <div class="feature-code"><span class="code-comment">// Complete stack context
-// for every fatal error</span></div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <h3>Handler Introspection</h3>
-                <p>Gain programmatic access to error and exception handlers for advanced error management systems.</p>
-                <div class="feature-code"><span class="code-keyword">$error</span> = <span class="code-keyword">get_error_handler</span>();
-<span class="code-keyword">$exception</span> = <span class="code-keyword">get_exception_handler</span>();</div>
-            </div>
-
-            <div class="feature-card">
+    <!-- Major Features with Before/After Comparisons -->
+    <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- URI Extension -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
                 <div class="feature-icon">🌐</div>
-                <h3>RTL Detection</h3>
-                <p>Built-in internationalization support with native right-to-left locale detection capabilities.</p>
-                <div class="feature-code"><span class="code-keyword">$isRTL</span> = <span class="code-keyword">locale_is_right_to_left</span>(<span class="code-string">'ar'</span>);
-<span class="code-comment">// Locale::isRightToLeft()</span></div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">💾</div>
-                <h3>Memory Ceiling</h3>
-                <p>Set absolute memory boundaries with max_memory_limit for enhanced resource management and security.</p>
-                <div class="feature-code">max_memory_limit = 512M</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="timeline" class="timeline">
-        <div class="section-header">
-            <div class="section-eyebrow">Roadmap</div>
-            <h2 class="section-title">Support Timeline</h2>
-            <p class="section-subtitle">Long-term support commitment for enterprise-grade stability and security.</p>
-        </div>
-
-        <div class="timeline-track">
-            <div class="timeline-line"></div>
-            
-            <div class="timeline-item">
-                <div class="timeline-marker">01</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">November 20, 2025</div>
-                    <h3>General Availability</h3>
-                    <p>PHP 8.5.0 released to production with full feature set, comprehensive documentation, and migration guides.</p>
+                <div>
+                    <h3 style="margin: 0;">RFC 3986 and WHATWG URL compliant API</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">New URI extension for modern URL parsing</p>
                 </div>
             </div>
 
-            <div class="timeline-item">
-                <div class="timeline-marker">02</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">November 2027</div>
-                    <h3>Active Support Ends</h3>
-                    <p>Transition to security-only updates. Bug fixes and general maintenance conclude after two years.</p>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$components = parse_url("https://php.net/releases/8.5/en.php");
+
+var_dump($components['host']);
+// string(7) "php.net"
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+use Uri\Rfc3986\Uri;
+
+$uri = new Uri("https://php.net/releases/8.5/en.php");
+
+var_dump($uri->getHost());
+// string(7) "php.net"
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clone with -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">📋</div>
+                <div>
+                    <h3 style="margin: 0;">Clone with v2</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Modify properties while cloning readonly objects</p>
                 </div>
             </div>
 
-            <div class="timeline-item">
-                <div class="timeline-marker">03</div>
-                <div class="timeline-content">
-                    <div class="timeline-date">November 2028</div>
-                    <h3>End of Life</h3>
-                    <p>Security support concludes. Migration to PHP 8.6+ strongly recommended for continued protection.</p>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+final readonly class PhpVersion {
+    public function __construct(
+        public string $version = 'PHP 8.4',
+    ) {}
+
+    public function withVersion(string $version) {
+        $newObject = clone $this;
+        $newObject->version = $version;
+
+        return $newObject;
+    }
+}
+
+var_dump(new PhpVersion()->withVersion('PHP 8.5'));
+// Fatal error: Uncaught Error:
+// Cannot modify readonly property PhpVersion::$version
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+final readonly class PhpVersion {
+    public function __construct(
+        public string $version = 'PHP 8.4',
+    ) {}
+
+    public function withVersion(string $version) {
+        return clone($this, ['version' => $version]);
+    }
+}
+
+$version = new PhpVersion();
+
+var_dump(
+    $version->withVersion('PHP 8.5'),
+    $version->version,
+);
+                    </code></pre>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section id="download" class="cta">
-        <div class="cta-bg"></div>
-        <div class="cta-glow-1"></div>
-        <div class="cta-glow-2"></div>
-        <div class="cta-content">
-            <h2>Ready to Evolve?</h2>
-            <p>Download PHP 8.5 and experience the next generation of web development.</p>
-            <div class="cta-buttons">
-                <a href="#" class="btn btn-primary">Download PHP 8.5</a>
-                <a href="#" class="btn btn-ghost">View Documentation</a>
+        <!-- Pipe Operator -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">|&gt;</div>
+                <div>
+                    <h3 style="margin: 0;">Pipe Operator</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Transform nested function calls into readable pipelines</p>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <h3>php.net</h3>
-                <p>A popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic, PHP powers everything from your blog to the most popular websites in the world.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Releases</h4>
-                <a href="#">PHP 8.5</a>
-                <a href="#">PHP 8.4</a>
-                <a href="#">PHP 8.3</a>
-                <a href="#">PHP 8.2</a>
-                <a href="#">All Versions</a>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <a href="#">Documentation</a>
-                <a href="#">Migration Guide</a>
-                <a href="#">RFC Archive</a>
-                <a href="#">Changelog</a>
-                <a href="#">Downloads</a>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <a href="#">Mailing Lists</a>
-                <a href="#">User Groups</a>
-                <a href="#">Conferences</a>
-                <a href="#">Contribute</a>
-                <a href="#">Get Involved</a>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$input = ' Some kind of string. ';
+
+$output = strtolower(
+    str_replace(['.', '/', '…'], '',
+        str_replace(' ', '-',
+            trim($input)
+        )
+    )
+);
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$input = ' Some kind of string. ';
+
+$output = $input
+    |> trim(...)
+    |> (fn (string $string) => str_replace(' ', '-', $string))
+    |> (fn (string $string) => str_replace(['.', '/', '…'], '', $string))
+    |> strtolower(...);
+                    </code></pre>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>Copyright © 2001-2025 The PHP Group. All rights reserved.</p>
+
+        <!-- Array First/Last -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">[]</div>
+                <div>
+                    <h3 style="margin: 0;">array_first() and array_last()</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Convenient array boundary access functions</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$php = [
+    'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
+    'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
+    'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
+    'php-85' => ['state' => 'upcoming', 'branch' => 'PHP-8.5'],
+];
+
+$upcomingRelease = null;
+foreach ($php as $key => $version) {
+    if ($version['state'] === 'upcoming') {
+        $upcomingRelease = $version;
+        break;
+    }
+}
+
+var_dump($upcomingRelease);
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$php = [
+    'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
+    'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
+    'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
+    'php-85' => ['state' => 'upcoming', 'branch' => 'PHP-8.5'],
+];
+
+$upcomingRelease = array_first(
+    array_filter(
+        $php,
+        static fn($version) => $version['state'] === 'upcoming'
+    )
+);
+
+var_dump($upcomingRelease);
+                    </code></pre>
+                </div>
+            </div>
         </div>
-    </footer>
+
+        <!-- NoDiscard Attribute -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">⚠️</div>
+                <div>
+                    <h3 style="margin: 0;">#[\NoDiscard] Attribute</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Warn when function return values are ignored</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+function getPhpVersion(): string {
+    return 'PHP 8.4';
+}
+
+getPhpVersion(); // No Errors
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+#[\NoDiscard]
+function getPhpVersion(): string {
+    return 'PHP 8.4';
+}
+
+getPhpVersion();
+// Warning: The return value of function
+// getPhpVersion() should either be used or
+// intentionally ignored by casting it as (void)
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- First Class Callables -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">🎯</div>
+                <div>
+                    <h3 style="margin: 0;">First Class Callables in Constant Expressions</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Use closures and callables in attributes</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+final class CalculatorTest extends \PHPUnit\Framework\TestCase
+{
+    #[DataProvider('subtractionProvider')]
+    public function testSubtraction(
+        int $minuend,
+        int $subtrahend,
+        int $result
+    ): void
+    {
+        $this->assertSame(
+            $result,
+            Calculator::subtract($minuend, $subtrahend)
+        );
+    }
+
+    public static function subtractionProvider(): iterable
+    {
+        for ($i = -10; $i <= 10; $i++) {
+            yield [$i, $i, 0];
+            yield [$i, 0, $i];
+            yield [0, $i, -$i];
+        }
+    }
+}
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+final class CalculatorTest
+{
+    #[Test\CaseGenerator(static function (): iterable {
+        for ($i = -10; $i <= 10; $i++) {
+            yield [$i, $i, 0];
+            yield [$i, 0, $i];
+            yield [0, $i, ($i * -1)];
+        }
+    })]
+    public function testSubtraction(
+        int $minuend,
+        int $subtrahend,
+        int $result
+    )
+    {
+        \assert(
+            Calculator::subtract($minuend, $subtrahend) === $result
+        );
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- cURL Share Persistent -->
+        <div class="feature-card" style="margin-bottom: 3rem; padding: 4rem;">
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="feature-icon">🔗</div>
+                <div>
+                    <h3 style="margin: 0;">Persistent cURL Share Handles</h3>
+                    <p style="margin: 0.5rem 0 0; color: rgba(248, 250, 252, 0.6); font-size: 1rem;">Simplified and improved cURL connection pooling</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                <div>
+                    <div class="code-label code-label-old">PHP &lt; 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$sh = curl_share_init();
+curl_share_setopt($sh, CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
+curl_share_setopt($sh, CURLSHOPT_SHARE, CURL_LOCK_DATA_CONNECT);
+
+$ch1 = curl_init('https://php.net/');
+curl_setopt($ch1, CURLOPT_SHARE, $sh);
+curl_exec($ch1);
+
+$ch2 = curl_init('https://thephp.foundation/');
+curl_setopt($ch2, CURLOPT_SHARE, $sh);
+curl_exec($ch2);
+
+curl_share_close($sh);
+
+curl_close($ch1);
+curl_close($ch2);
+                    </code></pre>
+                </div>
+
+                <div class="comparison-arrow">→</div>
+
+                <div>
+                    <div class="code-label code-label-new">PHP 8.5</div>
+                    <pre class="feature-code"><code class="language-php">
+$sh = curl_share_init_persistent([
+    CURL_LOCK_DATA_DNS,
+    CURL_LOCK_DATA_CONNECT
+]);
+
+$ch1 = curl_init('https://php.net/');
+curl_setopt($ch1, CURLOPT_SHARE, $sh);
+curl_exec($ch1);
+
+$ch2 = curl_init('https://thephp.foundation/');
+curl_setopt($ch2, CURLOPT_SHARE, $sh);
+curl_exec($ch2);
+
+curl_close($ch1);
+curl_close($ch2);
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Features Grid -->
+    <div class="section-header" style="margin-top: 8rem;">
+        <div class="section-eyebrow">More Improvements</div>
+        <h2 class="section-title">Additional Features</h2>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🏷️</div>
+            <h3>Property Promotion for Final</h3>
+            <p>Constructor property promotion now available for final properties, reducing boilerplate code.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔖</div>
+            <h3>Attributes for Constants</h3>
+            <p>Apply attributes to class constants for better metadata support and documentation.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>#[\Override] for Properties</h3>
+            <p>The Override attribute now works on properties, catching inheritance errors at compile time.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">⚠️</div>
+            <h3>#[\Deprecated] for Traits</h3>
+            <p>Mark traits as deprecated to guide developers away from legacy code patterns.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Asymmetric Visibility for Static Properties</h3>
+            <p>Define different read/write visibility levels for static properties.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3>#[\DelayedTargetValidation]</h3>
+            <p>New attribute for deferring target validation in attribute processing.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Handler Introspection</h3>
+            <p>Access error and exception handlers with get_error_handler() and get_exception_handler().</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🌳</div>
+            <h3>Enhanced DOM Methods</h3>
+            <p>New getElementsByClassName() and insertAdjacentHTML() methods for DOM manipulation.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Enchant Dictionary Functions</h3>
+            <p>New enchant_dict_remove_from_session() and enchant_dict_remove() for spell checking.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📏</div>
+            <h3>grapheme_levenshtein()</h3>
+            <p>Calculate Levenshtein distance for Unicode grapheme clusters.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>OPcache File Cache Check</h3>
+            <p>New opcache_is_script_cached_in_file_cache() function for cache validation.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🪞</div>
+            <h3>Enhanced Reflection</h3>
+            <p>New ReflectionConstant and ReflectionProperty methods for deeper code introspection.</p>
+        </div>
+    </div>
+
+    <!-- Deprecations Section -->
+    <div class="section-header" style="margin-top: 8rem;">
+        <div class="section-eyebrow">Breaking Changes</div>
+        <h2 class="section-title">Deprecations</h2>
+        <p class="section-subtitle">PHP 8.5 maintains strong backward compatibility with minimal breaking changes.</p>
+    </div>
+
+    <div style="max-width: 1400px; margin: 0 auto;">
+        <div class="feature-card" style="padding: 3rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+            <h3 style="margin-bottom: 1rem;">Clean Upgrade Path</h3>
+            <p style="color: rgba(248, 250, 252, 0.7); max-width: 600px; margin: 0 auto;">
+                PHP 8.5 focuses on adding new features while maintaining compatibility.
+                No major deprecations in this release. Check the migration guide for detailed information.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="timeline" class="timeline">
+    <div class="section-header">
+        <div class="section-eyebrow">Roadmap</div>
+        <h2 class="section-title">Support Timeline</h2>
+        <p class="section-subtitle">Long-term support commitment for enterprise-grade stability and security.</p>
+    </div>
+
+    <div class="timeline-track">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item">
+            <div class="timeline-marker">01</div>
+            <div class="timeline-content">
+                <div class="timeline-date">November 20, 2025</div>
+                <h3>General Availability</h3>
+                <p>PHP 8.5.0 released to production with full feature set, comprehensive documentation, and migration guides.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-marker">02</div>
+            <div class="timeline-content">
+                <div class="timeline-date">November 2027</div>
+                <h3>Active Support Ends</h3>
+                <p>Transition to security-only updates. Bug fixes and general maintenance conclude after two years.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-marker">03</div>
+            <div class="timeline-content">
+                <div class="timeline-date">November 2028</div>
+                <h3>End of Life</h3>
+                <p>Security support concludes. Migration to PHP 8.6+ strongly recommended for continued protection.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="download" class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-glow-1"></div>
+    <div class="cta-glow-2"></div>
+    <div class="cta-content">
+        <h2>Ready to Evolve?</h2>
+        <p>Download PHP 8.5 and experience the next generation of web development.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">Download PHP 8.5</a>
+            <a href="#" class="btn btn-ghost">View Documentation</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <h3>php.net</h3>
+            <p>A popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic, PHP powers everything from your blog to the most popular websites in the world.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Releases</h4>
+            <a href="#">PHP 8.5</a>
+            <a href="#">PHP 8.4</a>
+            <a href="#">PHP 8.3</a>
+            <a href="#">PHP 8.2</a>
+            <a href="#">All Versions</a>
+        </div>
+        <div class="footer-section">
+            <h4>Resources</h4>
+            <a href="#">Documentation</a>
+            <a href="#">Migration Guide</a>
+            <a href="#">RFC Archive</a>
+            <a href="#">Changelog</a>
+            <a href="#">Downloads</a>
+        </div>
+        <div class="footer-section">
+            <h4>Community</h4>
+            <a href="#">Mailing Lists</a>
+            <a href="#">User Groups</a>
+            <a href="#">Conferences</a>
+            <a href="#">Contribute</a>
+            <a href="#">Get Involved</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>Copyright © 2001-2025 The PHP Group. All rights reserved.</p>
+    </div>
+</footer>
 </body>
 </html>
