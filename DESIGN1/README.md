@@ -68,4 +68,4 @@ Keep same grid system and card patterns
 Modify CSS custom properties for instant rebrand
 Timeline extends naturally with new dates
 
-The design strikes the perfect balance between modern aesthetics and practical maintainability - exactly what a release page needs for long-term use by the PHP community.RiprovaClaude può commettere errori. Per favore verifica le fonti citate.
+The design strikes the perfect balance between modern aesthetics and practical maintainability - exactly what a release page needs for long-term use by the PHP community.
