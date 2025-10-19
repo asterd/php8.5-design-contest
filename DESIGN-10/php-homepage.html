@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP 8.5 Released - Modern Design</title>
+    <style>
+        :root {
+            --php-purple: #777bb3;
+            --php-blue: #4f5b93;
+            --php-light: #8892bf;
+            --accent-cyan: #00d9ff;
+            --accent-pink: #ff006e;
+            --text-dark: #1a1a2e;
+            --text-medium: #4a4a5e;
+            --text-light: #6b6b7e;
+            --bg-light: #fafbfd;
+            --bg-white: #ffffff;
+            --border-color: #e5e7ef;
+            --success: #06d6a0;
+            --code-bg: #1e1e1e;
+            --php-deep: #4f5b93; /*  #2A2D4F; */
+            --php-bright: #A0AADF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, var(--php-purple) 0%, var(--php-blue) 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .version-badge::before {
+            content: '✨';
+            font-size: 1.25rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            opacity: 0.95;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--php-purple);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Wave Divider */
+        .wave-divider {
+            position: relative;
+            height: 100px;
+            background: var(--bg-light);
+            /* margin-top: -50px; */
+        }
+
+        .wave-divider::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--php-purple) 0%, var(--php-blue) 100%);
+            clip-path: ellipse(100% 100% at 50% 0%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 4rem 0 3rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--text-medium);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--php-blue);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .stats-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, white, var(--php-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        /* Feature Cards - Improved Layout */
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-header {
+            padding: 2.5rem 2.5rem 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--php-light), var(--php-purple));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .feature-info h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .feature-description {
+            color: var(--text-medium);
+            line-height: 1.7;
+            font-size: 1.0625rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .rfc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--php-purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: gap 0.3s ease;
+            padding: 0.5rem 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .rfc-link:hover {
+            gap: 0.75rem;
+            background: #f0f1f7;
+        }
+
+        /* Expandable Code Section - Improved */
+        .code-toggle {
+            background: var(--bg-light);
+            border: none;
+            width: 100%;
+            padding: 1.25rem 2.5rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--php-purple);
+            font-size: 0.9375rem;
+            transition: all 0.3s ease;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .code-toggle:hover {
+            background: #eef0f8;
+        }
+
+        .code-toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.125rem;
+        }
+
+        .code-toggle.active .code-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .code-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: var(--code-bg);
+        }
+
+        .code-content.expanded {
+            max-height: 3000px;
+        }
+
+        .code-comparison {
+            padding: 2.5rem;
+        }
+
+        /* Improved Code Layout - Single Column on Mobile, Side by Side on Desktop */
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .code-grid {
+                grid-template-columns: 1fr auto 1fr;
+                align-items: center;
+            }
+        }
+
+        .code-block {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            overflow-x: auto;
+        }
+
+        .code-label {
+            position: absolute;
+            top: -4px;
+            left: -0.30rem;
+            background: var(--text-dark);
+            color: white;
+            padding: 0.375rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .code-label.new {
+            background: linear-gradient(135deg, var(--success), var(--accent-cyan));
+        }
+
+        .code-block pre {
+            margin: 0;
+            margin-top: 20px;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: #e8e8e8;
+            overflow-x: auto;
+        }
+
+        /* Scrollbar Styling for Code Pre */
+        .code-block pre::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .code-block pre::-webkit-scrollbar-track {
+            background: #0d0d0d;
+            border-radius: 4px;
+        }
+
+        .code-block pre::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        .code-block pre::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .arrow-divider {
+            text-align: center;
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 1rem 0;
+            align-self: center;
+        }
+
+        /* Mobile: Vertical Arrow */
+        @media (max-width: 1023px) {
+            .arrow-divider::before {
+                content: '↓';
+            }
+        }
+
+        /* Desktop: Horizontal Arrow */
+        @media (min-width: 1024px) {
+            .arrow-divider::before {
+                content: '→';
+            }
+        }
+
+        /* Additional Features - Responsive Grid */
+        .additional-features {
+            background: var(--bg-white);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            margin: 4rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .additional-features h2 {
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .features-columns {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-columns {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-columns {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .features-columns > div {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 16px;
+        }
+
+        .features-columns h3 {
+            margin-bottom: 1.25rem;
+            color: var(--php-purple);
+            font-size: 1.25rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.625rem 0;
+            padding-left: 1.75rem;
+            position: relative;
+            color: var(--text-medium);
+            line-height: 1.6;
+            font-size: 0.9375rem;
+        }
+
+        .feature-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--php-purple);
+            font-weight: bold;
+        }
+
+        .feature-list code {
+            background: var(--bg-white);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: var(--php-purple);
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Highlights Section */
+        .highlights {
+            background: linear-gradient(135deg, var(--php-purple) 0%, var(--php-blue) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            margin: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlights::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .highlights-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .highlights h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .highlights-subtitle {
+            text-align: center;
+            opacity: 0.9;
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .highlights-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .highlights-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .highlight-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-item:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+        }
+
+        .highlight-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight-item p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .footer-cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .footer-cta p {
+            font-size: 1.25rem;
+            color: var(--text-medium);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 767px) {
+            .hero {
+                padding: 4rem 1.5rem 6rem;
+            }
+
+            .feature-header {
+                grid-template-columns: 1fr;
+                padding: 2rem 1.5rem 1.5rem;
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+            }
+
+            .code-toggle {
+                padding: 1rem 1.5rem;
+                font-size: 0.875rem;
+            }
+
+            .code-comparison {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1.5rem;
+            }
+
+            .additional-features {
+                padding: 2rem 1.5rem;
+            }
+
+            .features-columns > div {
+                padding: 1.5rem;
+            }
+
+            .highlights {
+                padding: 4rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* Syntax Highlighting Colors */
+        .keyword { color: #ff79c6; }
+        .string { color: #f1fa8c; }
+        .function { color: #50fa7b; }
+        .comment { color: #6272a4; font-style: italic; }
+        .variable { color: #8be9fd; }
+        .class { color: #bd93f9; }
+
+
+    </style>
+</head>
+<body>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="version-badge">Major Release</div>
+        <h1>PHP 8.5<br>Released!</h1>
+        <p class="hero-subtitle">A major update bringing the new URI extension, clone with modifications, pipe operator, and performance improvements to make PHP faster and more expressive.</p>
+        <a href="#download" class="cta-button">Upgrade to PHP 8.5 Now</a>
+    </div>
+</section>
+
+<section class="stats-bar">
+    <div class="stats-inner">
+        <div class="stat">
+            <div class="stat-value">Nov 2025</div>
+            <div class="stat-label">Release Date</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">2 Years</div>
+            <div class="stat-label">Active Support</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">3 Years</div>
+            <div class="stat-label">Security Fixes</div>
+        </div>
+    </div>
+</section>
+
+<div class="wave-divider"></div>
+
+<!-- Key Features -->
+<div class="container">
+    <section class="section-header">
+        <h2>What's New in PHP 8.5</h2>
+        <p>Major features that improve developer experience</p>
+    </section>
+
+    <div class="features-grid">
+        <!-- URI Extension Feature -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">🔗</div>
+                <div class="feature-info">
+                    <h3>URI Extension</h3>
+                    <p class="feature-description">RFC 3986 and WHATWG URL compliant API for modern, standards-based URL parsing and manipulation.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/url_parsing_api" class="rfc-link">Read RFC →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="variable">$components</span> = <span class="function">parse_url</span>(<span class="string">"https://php.net/releases/8.5/en.php"</span>);
+
+<span class="function">var_dump</span>(<span class="variable">$components</span>[<span class="string">'host'</span>]);
+<span class="comment">// string(7) "php.net"</span></code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="keyword">use</span> Uri\Rfc3986\Uri;
+
+<span class="variable">$uri</span> = <span class="keyword">new</span> <span class="function">Uri</span>(<span class="string">"https://php.net/releases/8.5/en.php"</span>);
+
+<span class="function">var_dump</span>(<span class="variable">$uri</span>-><span class="function">getHost</span>());
+<span class="comment">// string(7) "php.net"</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clone with v2 Feature -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">📋</div>
+                <div class="feature-info">
+                    <h3>Clone with v2</h3>
+                    <p class="feature-description">Modify properties while cloning readonly objects, making immutable patterns more ergonomic and practical.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/clone_with_v2" class="rfc-link">Read RFC →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="keyword">final readonly class</span> <span class="class">PhpVersion</span> {
+    <span class="keyword">public function</span> <span class="function">__construct</span>(
+        <span class="keyword">public</span> <span class="variable">string $version</span> = <span class="string">'PHP 8.4'</span>,
+    ) {}
+
+    <span class="keyword">public function</span> <span class="function">withVersion</span>(<span class="variable">string $version</span>) {
+        <span class="variable">$newObject</span> = <span class="keyword">clone</span> <span class="variable">$this</span>;
+        <span class="variable">$newObject</span>-><span class="variable">version</span> = <span class="variable">$version</span>;
+        <span class="keyword">return</span> <span class="variable">$newObject</span>;
+    }
+}
+
+<span class="comment">// Fatal error: Cannot modify readonly property</span></code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="keyword">final readonly class</span> <span class="class">PhpVersion</span> {
+    <span class="keyword">public function</span> <span class="function">__construct</span>(
+        <span class="keyword">public</span> <span class="variable">string $version</span> = <span class="string">'PHP 8.4'</span>,
+    ) {}
+
+    <span class="keyword">public function</span> <span class="function">withVersion</span>(<span class="variable">string $version</span>) {
+        <span class="keyword">return</span> <span class="keyword">clone</span>(<span class="variable">$this</span>, [<span class="string">'version'</span> => <span class="variable">$version</span>]);
+    }
+}
+
+<span class="variable">$version</span> = <span class="keyword">new</span> <span class="class">PhpVersion</span>();
+<span class="function">var_dump</span>(<span class="variable">$version</span>-><span class="function">withVersion</span>(<span class="string">'PHP 8.5'</span>));</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipe Operator Feature -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-info">
+                    <h3>Pipe Operator</h3>
+                    <p class="feature-description">Chain function calls elegantly with the new |> operator for cleaner, more readable code transformations.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/pipe-operator-v3" class="rfc-link">Read RFC →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="variable">$input</span> = <span class="string">' Some kind of string. '</span>;
+
+<span class="variable">$output</span> = <span class="function">strtolower</span>(
+    <span class="function">str_replace</span>([<span class="string">'.'</span>, <span class="string">'/'</span>, <span class="string">'…'</span>], <span class="string">''</span>,
+        <span class="function">str_replace</span>(<span class="string">' '</span>, <span class="string">'-'</span>,
+            <span class="function">trim</span>(<span class="variable">$input</span>)
+        )
+    )
+);</code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="variable">$input</span> = <span class="string">' Some kind of string. '</span>;
+
+<span class="variable">$output</span> = <span class="variable">$input</span>
+    |> <span class="function">trim</span>(...)
+    |> (<span class="keyword">fn</span> (<span class="variable">string $string</span>) => <span class="function">str_replace</span>(<span class="string">' '</span>, <span class="string">'-'</span>, <span class="variable">$string</span>))
+    |> (<span class="keyword">fn</span> (<span class="variable">string $string</span>) => <span class="function">str_replace</span>([<span class="string">'.'</span>, <span class="string">'/'</span>, <span class="string">'…'</span>], <span class="string">''</span>, <span class="variable">$string</span>))
+    |> <span class="function">strtolower</span>(...);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NoDiscard Attribute -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">🚫</div>
+                <div class="feature-info">
+                    <h3>#[\NoDiscard]</h3>
+                    <p class="feature-description">Mark function return values as important, catching bugs where critical values are accidentally ignored.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/marking_return_value_as_important" class="rfc-link">Read RFC →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="keyword">function</span> <span class="function">getPhpVersion</span>(): <span class="class">string</span> {
+    <span class="keyword">return</span> <span class="string">'PHP 8.4'</span>;
+}
+
+<span class="function">getPhpVersion</span>(); <span class="comment">// No Errors</span></code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code>#[<span class="class">\NoDiscard</span>]
+<span class="keyword">function</span> <span class="function">getPhpVersion</span>(): <span class="class">string</span> {
+    <span class="keyword">return</span> <span class="string">'PHP 8.5'</span>;
+}
+
+<span class="function">getPhpVersion</span>();
+<span class="comment">// Warning: The return value should be used</span>
+<span class="comment">// or cast as (void)</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- First Class Callables -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-info">
+                    <h3>First Class Callables</h3>
+                    <p class="feature-description">Use callables and closures in constant expressions, enabling more flexible attribute configurations.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/fcc_in_const_expr" class="rfc-link">RFC 1 →</a>
+                        <a href="https://wiki.php.net/rfc/closures_in_const_expr" class="rfc-link">RFC 2 →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="keyword">final class</span> <span class="class">CalculatorTest</span> {
+    #[<span class="class">DataProvider</span>(<span class="string">'subtractionProvider'</span>)]
+    <span class="keyword">public function</span> <span class="function">testSubtraction</span>(
+        <span class="class">int</span> <span class="variable">$minuend</span>, <span class="class">int</span> <span class="variable">$subtrahend</span>, <span class="class">int</span> <span class="variable">$result</span>
+    ): <span class="class">void</span> {
+        <span class="variable">$this</span>-><span class="function">assertSame</span>(<span class="variable">$result</span>,
+            <span class="class">Calculator</span>::<span class="function">subtract</span>(<span class="variable">$minuend</span>, <span class="variable">$subtrahend</span>));
+    }
+
+    <span class="keyword">public static function</span> <span class="function">subtractionProvider</span>(): <span class="class">iterable</span> {
+        <span class="keyword">for</span> (<span class="variable">$i</span> = -<span class="string">10</span>; <span class="variable">$i</span> &lt;= <span class="string">10</span>; <span class="variable">$i</span>++) {
+            <span class="keyword">yield</span> [<span class="variable">$i</span>, <span class="variable">$i</span>, <span class="string">0</span>];
+        }
+    }
+}</code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="keyword">final class</span> <span class="class">CalculatorTest</span> {
+    #[<span class="class">Test\CaseGenerator</span>(<span class="keyword">static function</span> (): <span class="class">iterable</span> {
+        <span class="keyword">for</span> (<span class="variable">$i</span> = -<span class="string">10</span>; <span class="variable">$i</span> &lt;= <span class="string">10</span>; <span class="variable">$i</span>++) {
+            <span class="keyword">yield</span> [<span class="variable">$i</span>, <span class="variable">$i</span>, <span class="string">0</span>];
+        }
+    })]
+    <span class="keyword">public function</span> <span class="function">testSubtraction</span>(
+        <span class="class">int</span> <span class="variable">$minuend</span>, <span class="class">int</span> <span class="variable">$subtrahend</span>, <span class="class">int</span> <span class="variable">$result</span>
+    ) {
+        <span class="function">\assert</span>(
+            <span class="class">Calculator</span>::<span class="function">subtract</span>(<span class="variable">$minuend</span>, <span class="variable">$subtrahend</span>) === <span class="variable">$result</span>
+        );
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- cURL Improvements -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">🔄</div>
+                <div class="feature-info">
+                    <h3>cURL Improvements</h3>
+                    <p class="feature-description">Persistent share handles with simplified API for better connection pooling and performance.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/curl_share_persistence" class="rfc-link">RFC 1 →</a>
+                        <a href="https://wiki.php.net/rfc/curl_share_persistence_improvement" class="rfc-link">RFC 2 →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="variable">$sh</span> = <span class="function">curl_share_init</span>();
+<span class="function">curl_share_setopt</span>(<span class="variable">$sh</span>, <span class="variable">CURLSHOPT_SHARE</span>, <span class="variable">CURL_LOCK_DATA_DNS</span>);
+<span class="function">curl_share_setopt</span>(<span class="variable">$sh</span>, <span class="variable">CURLSHOPT_SHARE</span>, <span class="variable">CURL_LOCK_DATA_CONNECT</span>);
+
+<span class="variable">$ch1</span> = <span class="function">curl_init</span>(<span class="string">'https://php.net/'</span>);
+<span class="function">curl_setopt</span>(<span class="variable">$ch1</span>, <span class="variable">CURLOPT_SHARE</span>, <span class="variable">$sh</span>);
+<span class="function">curl_exec</span>(<span class="variable">$ch1</span>);
+
+<span class="variable">$ch2</span> = <span class="function">curl_init</span>(<span class="string">'https://thephp.foundation/'</span>);
+<span class="function">curl_setopt</span>(<span class="variable">$ch2</span>, <span class="variable">CURLOPT_SHARE</span>, <span class="variable">$sh</span>);
+<span class="function">curl_exec</span>(<span class="variable">$ch2</span>);
+
+<span class="function">curl_share_close</span>(<span class="variable">$sh</span>);
+<span class="function">curl_close</span>(<span class="variable">$ch1</span>);
+<span class="function">curl_close</span>(<span class="variable">$ch2</span>);</code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="variable">$sh</span> = <span class="function">curl_share_init_persistent</span>([
+    <span class="variable">CURL_LOCK_DATA_DNS</span>,
+    <span class="variable">CURL_LOCK_DATA_CONNECT</span>
+]);
+
+<span class="variable">$ch1</span> = <span class="function">curl_init</span>(<span class="string">'https://php.net/'</span>);
+<span class="function">curl_setopt</span>(<span class="variable">$ch1</span>, <span class="variable">CURLOPT_SHARE</span>, <span class="variable">$sh</span>);
+<span class="function">curl_exec</span>(<span class="variable">$ch1</span>);
+
+<span class="variable">$ch2</span> = <span class="function">curl_init</span>(<span class="string">'https://thephp.foundation/'</span>);
+<span class="function">curl_setopt</span>(<span class="variable">$ch2</span>, <span class="variable">CURLOPT_SHARE</span>, <span class="variable">$sh</span>);
+<span class="function">curl_exec</span>(<span class="variable">$ch2</span>);
+
+<span class="function">curl_close</span>(<span class="variable">$ch1</span>);
+<span class="function">curl_close</span>(<span class="variable">$ch2</span>);
+<span class="comment">// Share handle persists automatically</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Array Functions -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-icon">📊</div>
+                <div class="feature-info">
+                    <h3>array_first() & array_last()</h3>
+                    <p class="feature-description">New convenience functions to easily retrieve first and last array elements without manual iteration.</p>
+                    <div class="feature-links">
+                        <a href="https://wiki.php.net/rfc/array_first_last" class="rfc-link">Read RFC →</a>
+                    </div>
+                </div>
+            </div>
+            <button class="code-toggle" onclick="toggleCode(this)">
+                <span>View Code Example</span>
+                <span class="code-toggle-icon">▼</span>
+            </button>
+            <div class="code-content">
+                <div class="code-comparison">
+                    <div class="code-grid">
+                        <div class="code-block">
+                            <div class="code-label">PHP &lt; 8.5</div>
+                            <pre><code><span class="variable">$php</span> = [
+    <span class="string">'php-82'</span> => [<span class="string">'state'</span> => <span class="string">'security'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.2'</span>],
+    <span class="string">'php-83'</span> => [<span class="string">'state'</span> => <span class="string">'active'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.3'</span>],
+    <span class="string">'php-84'</span> => [<span class="string">'state'</span> => <span class="string">'active'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.4'</span>],
+    <span class="string">'php-85'</span> => [<span class="string">'state'</span> => <span class="string">'upcoming'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.5'</span>],
+];
+
+<span class="variable">$upcomingRelease</span> = <span class="keyword">null</span>;
+<span class="keyword">foreach</span> (<span class="variable">$php</span> <span class="keyword">as</span> <span class="variable">$version</span>) {
+    <span class="keyword">if</span> (<span class="variable">$version</span>[<span class="string">'state'</span>] === <span class="string">'upcoming'</span>) {
+        <span class="variable">$upcomingRelease</span> = <span class="variable">$version</span>;
+        <span class="keyword">break</span>;
+    }
+}
+
+<span class="function">var_dump</span>(<span class="variable">$upcomingRelease</span>);</code></pre>
+                        </div>
+                        <div class="arrow-divider"></div>
+                        <div class="code-block">
+                            <div class="code-label new">PHP 8.5</div>
+                            <pre><code><span class="variable">$php</span> = [
+    <span class="string">'php-82'</span> => [<span class="string">'state'</span> => <span class="string">'security'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.2'</span>],
+    <span class="string">'php-83'</span> => [<span class="string">'state'</span> => <span class="string">'active'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.3'</span>],
+    <span class="string">'php-84'</span> => [<span class="string">'state'</span> => <span class="string">'active'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.4'</span>],
+    <span class="string">'php-85'</span> => [<span class="string">'state'</span> => <span class="string">'upcoming'</span>, <span class="string">'branch'</span> => <span class="string">'PHP-8.5'</span>],
+];
+
+<span class="variable">$upcomingRelease</span> = <span class="function">array_first</span>(
+    <span class="function">array_filter</span>(
+        <span class="variable">$php</span>,
+        <span class="keyword">static fn</span>(<span class="variable">$version</span>) => <span class="variable">$version</span>[<span class="string">'state'</span>] === <span class="string">'upcoming'</span>
+    )
+);
+
+<span class="function">var_dump</span>(<span class="variable">$upcomingRelease</span>);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Features Section -->
+    <section class="additional-features">
+        <h2>Additional Improvements</h2>
+        <div class="features-columns">
+            <div>
+                <h3>New Classes & Interfaces</h3>
+                <ul class="feature-list">
+                    <li><code>Uri\UriException</code>, <code>Uri\InvalidUriException</code></li>
+                    <li><code>Uri\Rfc3986\Uri</code> class</li>
+                    <li><code>Uri\WhatWg\Url</code> class</li>
+                    <li><code>CurlSharePersistentHandle</code> class</li>
+                </ul>
+            </div>
+            <div>
+                <h3>New Functions</h3>
+                <ul class="feature-list">
+                    <li><code>array_first()</code> and <code>array_last()</code></li>
+                    <li><code>get_error_handler()</code>, <code>get_exception_handler()</code></li>
+                    <li><code>curl_multi_get_handles()</code></li>
+                    <li><code>curl_share_init_persistent()</code></li>
+                    <li><code>grapheme_levenshtein()</code></li>
+                    <li><code>opcache_is_script_cached_in_file_cache()</code></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Language Enhancements</h3>
+                <ul class="feature-list">
+                    <li>Property Promotion for <code>final</code> classes</li>
+                    <li>Attributes now available for constants</li>
+                    <li><code>#[\Override]</code> attribute for properties</li>
+                    <li><code>#[\Deprecated]</code> for traits</li>
+                    <li>Asymmetric Visibility for Static Properties</li>
+                    <li>New <code>#[\DelayedTargetValidation]</code> attribute</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Highlights Section -->
+<section class="highlights">
+    <div class="container highlights-content">
+        <h2>Why Upgrade to PHP 8.5?</h2>
+        <p class="highlights-subtitle">Better performance, better syntax, improved type safety</p>
+        <div class="highlights-grid">
+            <div class="highlight-item">
+                <h3>⚡ Performance</h3>
+                <p>General optimizations and improvements across the engine for better speed and efficiency in production environments.</p>
+            </div>
+            <div class="highlight-item">
+                <h3>🎨 Modern Syntax</h3>
+                <p>Pipe operator, clone with modifications, and other syntax improvements make code more expressive and maintainable.</p>
+            </div>
+            <div class="highlight-item">
+                <h3>🔒 Type Safety</h3>
+                <p>Enhanced attributes and stricter typing options help catch bugs earlier in development.</p>
+            </div>
+            <div class="highlight-item">
+                <h3>🌐 Standards Compliant</h3>
+                <p>RFC 3986 and WHATWG URL support ensures compatibility with modern web standards.</p>
+            </div>
+            <div class="highlight-item">
+                <h3>🔧 Developer Experience</h3>
+                <p>Convenience functions and improved APIs reduce boilerplate and make common tasks easier.</p>
+            </div>
+            <div class="highlight-item">
+                <h3>📦 Production Ready</h3>
+                <p>Thoroughly tested and battle-hardened, ready for your mission-critical applications.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer CTA -->
+<section class="footer-cta">
+    <div class="container">
+        <h2>Ready to Upgrade?</h2>
+        <p>PHP 8.5 is available for download now. Get started with the latest features and improvements today.</p>
+        <a href="https://www.php.net/downloads" class="cta-button">Download PHP 8.5</a>
+        <p style="margin-top: 2rem; font-size: 1rem; color: var(--text-light);">
+            View the <a href="https://www.php.net/ChangeLog-8.php#PHP_8_5" style="color: var(--php-purple); text-decoration: none; font-weight: 600;">ChangeLog</a>
+            and <a href="https://www.php.net/manual/en/migration85.php" style="color: var(--php-purple); text-decoration: none; font-weight: 600;">Migration Guide</a> for detailed information.
+        </p>
+    </div>
+</section>
+
+<script>
+    function toggleCode(button) {
+        button.classList.toggle('active');
+        const content = button.nextElementSibling;
+        content.classList.toggle('expanded');
+    }
+</script>
+</body>
+</html>
