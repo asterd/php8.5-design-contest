@@ -1,854 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP 8.5 - Refined Developer Experience</title>
-    <meta name="description" content="PHP 8.5 brings refined developer experience with new utility functions, enhanced debugging, and modern syntax improvements including pipe operator, clone with, and more.">
-    <meta name="author" content="PHP Group">
-    <meta name="keywords" content="PHP 8.5, PHP, programming language, web development, pipe operator, array_first, array_last, clone with">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHP 8.5 - Refined Developer Experience</title>
+  <meta name="description" content="PHP 8.5 brings refined developer experience with new utility functions, enhanced debugging, and modern syntax improvements including pipe operator, clone with, and more.">
+  <meta name="author" content="PHP Group">
+  <meta name="keywords" content="PHP 8.5, PHP, programming language, web development, pipe operator, array_first, array_last, clone with">
 
-    <meta property="og:title" content="PHP 8.5 - Refined Developer Experience">
-    <meta property="og:description" content="Major improvements with modern syntax, better APIs, and enhanced developer experience">
-    <meta property="og:type" content="website">
+  <meta property="og:title" content="PHP 8.5 - Refined Developer Experience">
+  <meta property="og:description" content="Major improvements with modern syntax, better APIs, and enhanced developer experience">
+  <meta property="og:type" content="website">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PHP 8.5 - Refined Developer Experience">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PHP 8.5 - Refined Developer Experience">
 
-    <!-- Tailwind CSS CDN -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        background: 'hsl(var(--background))',
-                        foreground: 'hsl(var(--foreground))',
-                        card: {
-                            DEFAULT: 'hsl(var(--card))',
-                            foreground: 'hsl(var(--card-foreground))'
-                        },
-                        popover: {
-                            DEFAULT: 'hsl(var(--popover))',
-                            foreground: 'hsl(var(--popover-foreground))'
-                        },
-                        primary: {
-                            DEFAULT: 'hsl(var(--primary))',
-                            foreground: 'hsl(var(--primary-foreground))'
-                        },
-                        secondary: {
-                            DEFAULT: 'hsl(var(--secondary))',
-                            foreground: 'hsl(var(--secondary-foreground))'
-                        },
-                        muted: {
-                            DEFAULT: 'hsl(var(--muted))',
-                            foreground: 'hsl(var(--muted-foreground))'
-                        },
-                        accent: {
-                            DEFAULT: 'hsl(var(--accent))',
-                            foreground: 'hsl(var(--accent-foreground))'
-                        },
-                        destructive: {
-                            DEFAULT: 'hsl(var(--destructive))',
-                            foreground: 'hsl(var(--destructive-foreground))'
-                        },
-                        border: 'hsl(var(--border))',
-                        input: 'hsl(var(--input))',
-                        ring: 'hsl(var(--ring))',
-                    },
-                    borderRadius: {
-                        lg: 'var(--radius)',
-                        md: 'calc(var(--radius) - 2px)',
-                        sm: 'calc(var(--radius) - 4px)',
-                    }
-                }
-            }
+  <!-- Tailwind CSS CDN -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            card: {
+              DEFAULT: 'hsl(var(--card))',
+              foreground: 'hsl(var(--card-foreground))'
+            },
+            popover: {
+              DEFAULT: 'hsl(var(--popover))',
+              foreground: 'hsl(var(--popover-foreground))'
+            },
+            primary: {
+              DEFAULT: 'hsl(var(--primary))',
+              foreground: 'hsl(var(--primary-foreground))'
+            },
+            secondary: {
+              DEFAULT: 'hsl(var(--secondary))',
+              foreground: 'hsl(var(--secondary-foreground))'
+            },
+            muted: {
+              DEFAULT: 'hsl(var(--muted))',
+              foreground: 'hsl(var(--muted-foreground))'
+            },
+            accent: {
+              DEFAULT: 'hsl(var(--accent))',
+              foreground: 'hsl(var(--accent-foreground))'
+            },
+            destructive: {
+              DEFAULT: 'hsl(var(--destructive))',
+              foreground: 'hsl(var(--destructive-foreground))'
+            },
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+          },
+          borderRadius: {
+            lg: 'var(--radius)',
+            md: 'calc(var(--radius) - 2px)',
+            sm: 'calc(var(--radius) - 4px)',
+          }
         }
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Highlight.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <style>
+    /* Custom CSS Variables */
+    :root {
+      --background: #ffffff;
+      --foreground: #0d0d0d;
+      --card: #fafafa;
+      --card-foreground: #0d0d0d;
+      --popover: #ffffff;
+      --popover-foreground: #0d0d0d;
+      --primary: #171717;
+      --primary-foreground: #f7f7f7;
+      --secondary: #f5f5f5;
+      --secondary-foreground: #171717;
+      --muted: #f5f5f5;
+      --muted-foreground: #737373;
+      --accent: #6d28d9;
+      --accent-foreground: #ffffff;
+      --destructive: #dc2626;
+      --destructive-foreground: #f7f7f7;
+      --border: #e6e6e6;
+      --input: #e6e6e6;
+      --ring: #6d28d9;
+      --radius: 0.75rem;
+      --gradient-start: 0 0% 98%;
+      --gradient-end: 262 30% 96%;
+      --code-bg: #f5f5f5;
+      --code-foreground: #1a1a1a;
+    }
 
-    <!-- Highlight.js CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    .dark {
+      --background: #080808;
+      --foreground: #f7f7f7;
+      --card: #0d0d0d;
+      --card-foreground: #f7f7f7;
+      --popover: #0d0d0d;
+      --popover-foreground: #f7f7f7;
+      --primary: #f7f7f7;
+      --primary-foreground: #171717;
+      --secondary: #171717;
+      --secondary-foreground: #f7f7f7;
+      --muted: #171717;
+      --muted-foreground: #999999;
+      --accent: #8b5cf6;
+      --accent-foreground: #ffffff;
+      --destructive: #dc2626;
+      --destructive-foreground: #f7f7f7;
+      --border: #262626;
+      --input: #262626;
+      --ring: #8b5cf6;
+      --gradient-start: #080808;
+      --gradient-end: #1a0b2e;
+      --code-bg: #1f1f1f;
+      --code-foreground: #e0e0e0;
+    }
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    /* Base Styles */
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      scroll-behavior: smooth;
+    }
 
-    <style>
-        /* Custom CSS Variables */
-        :root {
-            --background: #ffffff;
-            --foreground: #0d0d0d;
-            --card: #fafafa;
-            --card-foreground: #0d0d0d;
-            --popover: #ffffff;
-            --popover-foreground: #0d0d0d;
-            --primary: #171717;
-            --primary-foreground: #f7f7f7;
-            --secondary: #f5f5f5;
-            --secondary-foreground: #171717;
-            --muted: #f5f5f5;
-            --muted-foreground: #737373;
-            --accent: #6d28d9;
-            --accent-foreground: #ffffff;
-            --destructive: #dc2626;
-            --destructive-foreground: #f7f7f7;
-            --border: #e6e6e6;
-            --input: #e6e6e6;
-            --ring: #6d28d9;
-            --radius: 0.75rem;
-            --gradient-start: 0 0% 98%;
-            --gradient-end: 262 30% 96%;
-            --code-bg: #f5f5f5;
-            --code-foreground: #1a1a1a;
-        }
+    /* Animations */
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
 
-        .dark {
-            --background: #080808;
-            --foreground: #f7f7f7;
-            --card: #0d0d0d;
-            --card-foreground: #f7f7f7;
-            --popover: #0d0d0d;
-            --popover-foreground: #f7f7f7;
-            --primary: #f7f7f7;
-            --primary-foreground: #171717;
-            --secondary: #171717;
-            --secondary-foreground: #f7f7f7;
-            --muted: #171717;
-            --muted-foreground: #999999;
-            --accent: #8b5cf6;
-            --accent-foreground: #ffffff;
-            --destructive: #dc2626;
-            --destructive-foreground: #f7f7f7;
-            --border: #262626;
-            --input: #262626;
-            --ring: #8b5cf6;
-            --gradient-start: #080808;
-            --gradient-end: #1a0b2e;
-            --code-bg: #1f1f1f;
-            --code-foreground: #e0e0e0;
-        }
+    @keyframes badge-glow {
+      0%, 100% {
+        background-color: rgba(109, 40, 217, 0.1);
+        box-shadow: 0 0 0 0 rgba(109, 40, 217, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        background-color: rgba(109, 40, 217, 0.2);
+        box-shadow: 0 0 20px 5px rgba(109, 40, 217, 0.4);
+        transform: scale(1.05);
+      }
+    }
 
-        /* Base Styles */
-        body {
-            background-color: var(--background);
-            color: var(--foreground);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            scroll-behavior: smooth;
-        }
+    @keyframes fade-in-up {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Animations */
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+    @keyframes slide-down {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
 
-        @keyframes badge-glow {
-            0%, 100% {
-                background-color: rgba(109, 40, 217, 0.1);
-                box-shadow: 0 0 0 0 rgba(109, 40, 217, 0.3);
-                transform: scale(1);
-            }
-            50% {
-                background-color: rgba(109, 40, 217, 0.2);
-                box-shadow: 0 0 20px 5px rgba(109, 40, 217, 0.4);
-                transform: scale(1.05);
-            }
-        }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
 
-        @keyframes fade-in-up {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+    /* Scroll to Top Button */
+    #scroll-to-top {
+      background-color: #000;
+      color: #fff;
+    }
+    
+    .dark #scroll-to-top {
+      background-color: #fff;
+      color: #000;
+    }
 
-        @keyframes slide-down {
-            0% { opacity: 0; transform: translateY(-10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+    /* Code Syntax Highlighting */
+    .hljs {
+      background: var(--code-bg) !important;
+      color: var(--code-foreground) !important;
+      padding: 1rem;
+      border-radius: calc(var(--radius) - 2px);
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      scrollbar-width: thin;
+      scrollbar-color: #c5c5c5 var(--code-bg);
+      box-sizing: border-box;
+    }
+    
+    /* Code block container with visible borders */
+    .code-block-container {
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+    @media (min-width: 640px) {
+      .hljs { padding: 1.25rem; font-size: 0.9375rem; }
+    }
 
-        /* Scroll to Top Button */
-        #scroll-to-top {
-            background-color: #000;
-            color: #fff;
-        }
+    /* Light Mode Syntax Highlighting */
+    :root .hljs-keyword,
+    :root .hljs-selector-tag,
+    :root .hljs-literal,
+    :root .hljs-section,
+    :root .hljs-link {
+      color: #6d28d9;
+      font-weight: 500;
+    }
 
-        .dark #scroll-to-top {
-            background-color: #fff;
-            color: #000;
-        }
+    :root .hljs-string,
+    :root .hljs-title,
+    :root .hljs-name,
+    :root .hljs-type,
+    :root .hljs-attribute,
+    :root .hljs-symbol,
+    :root .hljs-bullet,
+    :root .hljs-addition,
+    :root .hljs-variable,
+    :root .hljs-template-tag,
+    :root .hljs-template-variable {
+      color: #0d9488;
+    }
 
-        /* Code Syntax Highlighting */
-        .hljs {
-            background: var(--code-bg) !important;
-            color: var(--code-foreground) !important;
-            padding: 1rem;
-            border-radius: calc(var(--radius) - 2px);
-            overflow-x: auto;
-            font-size: 0.875rem;
-            line-height: 1.6;
-            border: 1px solid var(--border);
-            scrollbar-width: thin;
-            scrollbar-color: #c5c5c5 var(--code-bg);
-        }
+    :root .hljs-comment,
+    :root .hljs-quote,
+    :root .hljs-deletion,
+    :root .hljs-meta {
+      color: #737373;
+      font-style: italic;
+    }
 
-        @media (min-width: 640px) {
-            .hljs { padding: 1.25rem; font-size: 0.9375rem; }
-        }
+    :root .hljs-number,
+    :root .hljs-regexp,
+    :root .hljs-selector-id,
+    :root .hljs-selector-class,
+    :root .hljs-selector-attr,
+    :root .hljs-selector-pseudo {
+      color: #ea580c;
+    }
 
-        /* Light Mode Syntax Highlighting */
-        :root .hljs-keyword,
-        :root .hljs-selector-tag,
-        :root .hljs-literal,
-        :root .hljs-section,
-        :root .hljs-link {
-            color: #6d28d9;
-            font-weight: 500;
-        }
+    :root .hljs-function,
+    :root .hljs-class,
+    :root .hljs-params {
+      color: #2563eb;
+    }
 
-        :root .hljs-string,
-        :root .hljs-title,
-        :root .hljs-name,
-        :root .hljs-type,
-        :root .hljs-attribute,
-        :root .hljs-symbol,
-        :root .hljs-bullet,
-        :root .hljs-addition,
-        :root .hljs-variable,
-        :root .hljs-template-tag,
-        :root .hljs-template-variable {
-            color: #0d9488;
-        }
+    :root .hljs-built_in {
+      color: #d97706;
+    }
 
-        :root .hljs-comment,
-        :root .hljs-quote,
-        :root .hljs-deletion,
-        :root .hljs-meta {
-            color: #737373;
-            font-style: italic;
-        }
+    /* Dark Mode Syntax Highlighting */
+    .dark .hljs-keyword,
+    .dark .hljs-selector-tag,
+    .dark .hljs-literal,
+    .dark .hljs-section,
+    .dark .hljs-link {
+      color: #c4b5fd;
+      font-weight: 500;
+    }
 
-        :root .hljs-number,
-        :root .hljs-regexp,
-        :root .hljs-selector-id,
-        :root .hljs-selector-class,
-        :root .hljs-selector-attr,
-        :root .hljs-selector-pseudo {
-            color: #ea580c;
-        }
+    .dark .hljs-string,
+    .dark .hljs-title,
+    .dark .hljs-name,
+    .dark .hljs-type,
+    .dark .hljs-attribute,
+    .dark .hljs-symbol,
+    .dark .hljs-bullet,
+    .dark .hljs-addition,
+    .dark .hljs-variable,
+    .dark .hljs-template-tag,
+    .dark .hljs-template-variable {
+      color: #5eead4;
+    }
 
-        :root .hljs-function,
-        :root .hljs-class,
-        :root .hljs-params {
-            color: #2563eb;
-        }
+    .dark .hljs-comment,
+    .dark .hljs-quote,
+    .dark .hljs-deletion,
+    .dark .hljs-meta {
+      color: #a3a3a3;
+      font-style: italic;
+    }
 
-        :root .hljs-built_in {
-            color: #d97706;
-        }
+    .dark .hljs-number,
+    .dark .hljs-regexp,
+    .dark .hljs-selector-id,
+    .dark .hljs-selector-class,
+    .dark .hljs-selector-attr,
+    .dark .hljs-selector-pseudo {
+      color: #fdba74;
+    }
 
-        /* Dark Mode Syntax Highlighting */
-        .dark .hljs-keyword,
-        .dark .hljs-selector-tag,
-        .dark .hljs-literal,
-        .dark .hljs-section,
-        .dark .hljs-link {
-            color: #c4b5fd;
-            font-weight: 500;
-        }
+    .dark .hljs-function,
+    .dark .hljs-class,
+    .dark .hljs-params {
+      color: #93c5fd;
+    }
 
-        .dark .hljs-string,
-        .dark .hljs-title,
-        .dark .hljs-name,
-        .dark .hljs-type,
-        .dark .hljs-attribute,
-        .dark .hljs-symbol,
-        .dark .hljs-bullet,
-        .dark .hljs-addition,
-        .dark .hljs-variable,
-        .dark .hljs-template-tag,
-        .dark .hljs-template-variable {
-            color: #5eead4;
-        }
+    .dark .hljs-built_in {
+      color: #fbbf24;
+    }
 
-        .dark .hljs-comment,
-        .dark .hljs-quote,
-        .dark .hljs-deletion,
-        .dark .hljs-meta {
-            color: #a3a3a3;
-            font-style: italic;
-        }
+    /* Utility Classes */
+    .animate-fade-in-up { animation: fade-in-up 0.6s ease-out; }
+    .animate-slide-down { animation: slide-down 0.3s ease-out; }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 
-        .dark .hljs-number,
-        .dark .hljs-regexp,
-        .dark .hljs-selector-id,
-        .dark .hljs-selector-class,
-        .dark .hljs-selector-attr,
-        .dark .hljs-selector-pseudo {
-            color: #fdba74;
-        }
+    .transition-all { transition-property: all; transition-duration: 300ms; }
+    .duration-200 { transition-duration: 200ms; }
+    .duration-300 { transition-duration: 300ms; }
 
-        .dark .hljs-function,
-        .dark .hljs-class,
-        .dark .hljs-params {
-            color: #93c5fd;
-        }
+    .backdrop-blur-lg { backdrop-filter: blur(16px); }
+    .backdrop-blur-sm { backdrop-filter: blur(4px); }
 
-        .dark .hljs-built_in {
-            color: #fbbf24;
-        }
+    .bg-background { background-color: var(--background); }
+    .bg-background\/80 { background-color: rgba(255, 255, 255, 0.8); }
+    .dark .bg-background\/80 { background-color: rgba(8, 8, 8, 0.8); }
+    .bg-background\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    .dark .bg-background\/95 { background-color: rgba(8, 8, 8, 0.95); }
+    .bg-card\/50 { background-color: rgba(250, 250, 250, 0.5); }
+    .dark .bg-card\/50 { background-color: rgba(13, 13, 13, 0.5); }
+    .bg-accent { background-color: var(--accent); }
+    .bg-accent\/5 { background-color: rgba(109, 40, 217, 0.05); }
+    .dark .bg-accent\/5 { background-color: rgba(139, 92, 246, 0.05); }
+    .bg-accent\/10 { background-color: rgba(109, 40, 217, 0.1); }
+    .dark .bg-accent\/10 { background-color: rgba(139, 92, 246, 0.1); }
+    .bg-accent\/20 { background-color: rgba(109, 40, 217, 0.2); }
+    .dark .bg-accent\/20 { background-color: rgba(139, 92, 246, 0.2); }
+    .bg-card { background-color: var(--card); }
+    .bg-border { background-color: var(--border); }
+    .bg-muted\/30 { background-color: rgba(245, 245, 245, 0.3); }
+    .dark .bg-muted\/30 { background-color: rgba(23, 23, 23, 0.3); }
+    .bg-destructive\/10 { background-color: rgba(220, 38, 38, 0.1); }
+    .dark .bg-destructive\/10 { background-color: rgba(220, 38, 38, 0.1); }
+    .bg-green-500\/10 { background-color: rgba(34, 197, 94, 0.1); }
+    .dark .bg-green-500\/10 { background-color: rgba(34, 197, 94, 0.1); }
 
-        /* Utility Classes */
-        .animate-fade-in-up { animation: fade-in-up 0.6s ease-out; }
-        .animate-slide-down { animation: slide-down 0.3s ease-out; }
-        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    .border { border: 1px solid var(--border); }
+    .border-b { border-bottom: 1px solid var(--border); }
+    .border-4 { border-width: 4px; }
+    .border-accent\/20 { border-color: rgba(109, 40, 217, 0.2); }
 
-        .transition-all { transition-property: all; transition-duration: 300ms; }
-        .duration-200 { transition-duration: 200ms; }
-        .duration-300 { transition-duration: 300ms; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .rounded-md { border-radius: 0.375rem; }
+    .rounded-full { border-radius: 9999px; }
 
-        .backdrop-blur-lg { backdrop-filter: blur(16px); }
-        .backdrop-blur-sm { backdrop-filter: blur(4px); }
+    .text-accent { color: var(--accent); }
+    .text-accent-foreground { color: var(--accent-foreground); }
+    .text-muted-foreground { color: var(--muted-foreground); }
+    .text-destructive { color: var(--destructive); }
+    .text-green-500 { color: #22c55e; }
+    .dark .text-green-500 { color: #22c55e; }
+    .text-emerald-600 { color: #059669; }
+    .dark .text-emerald-400 { color: #34d399; }
+    .text-amber-600 { color: #d97706; }
+    .dark .text-amber-400 { color: #fbbf24; }
 
-        .bg-background { background-color: var(--background); }
-        .bg-background\/80 { background-color: rgba(255, 255, 255, 0.8); }
-        .dark .bg-background\/80 { background-color: rgba(8, 8, 8, 0.8); }
-        .bg-background\/95 { background-color: rgba(255, 255, 255, 0.95); }
-        .dark .bg-background\/95 { background-color: rgba(8, 8, 8, 0.95); }
-        .bg-card\/50 { background-color: rgba(250, 250, 250, 0.5); }
-        .dark .bg-card\/50 { background-color: rgba(13, 13, 13, 0.5); }
-        .bg-accent { background-color: var(--accent); }
-        .bg-accent\/5 { background-color: rgba(109, 40, 217, 0.05); }
-        .dark .bg-accent\/5 { background-color: rgba(139, 92, 246, 0.05); }
-        .bg-accent\/10 { background-color: rgba(109, 40, 217, 0.1); }
-        .dark .bg-accent\/10 { background-color: rgba(139, 92, 246, 0.1); }
-        .bg-accent\/20 { background-color: rgba(109, 40, 217, 0.2); }
-        .dark .bg-accent\/20 { background-color: rgba(139, 92, 246, 0.2); }
-        .bg-card { background-color: var(--card); }
-        .bg-border { background-color: var(--border); }
-        .bg-muted\/30 { background-color: rgba(245, 245, 245, 0.3); }
-        .dark .bg-muted\/30 { background-color: rgba(23, 23, 23, 0.3); }
-        .bg-destructive\/10 { background-color: rgba(220, 38, 38, 0.1); }
-        .dark .bg-destructive\/10 { background-color: rgba(220, 38, 38, 0.1); }
-        .bg-green-500\/10 { background-color: rgba(34, 197, 94, 0.1); }
-        .dark .bg-green-500\/10 { background-color: rgba(34, 197, 94, 0.1); }
+    .z-50 { z-index: 50; }
+    .z-10 { z-index: 10; }
+    .-z-10 { z-index: -10; }
 
-        .border { border: 1px solid var(--border); }
-        .border-b { border-bottom: 1px solid var(--border); }
-        .border-4 { border-width: 4px; }
-        .border-accent\/20 { border-color: rgba(109, 40, 217, 0.2); }
+    .container {
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
 
-        .rounded-lg { border-radius: 0.5rem; }
-        .rounded-md { border-radius: 0.375rem; }
-        .rounded-full { border-radius: 9999px; }
+    @media (min-width: 640px) {
+      .container {
+        max-width: 640px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
 
-        .text-accent { color: var(--accent); }
-        .text-accent-foreground { color: var(--accent-foreground); }
-        .text-muted-foreground { color: var(--muted-foreground); }
-        .text-destructive { color: var(--destructive); }
-        .text-green-500 { color: #22c55e; }
-        .dark .text-green-500 { color: #22c55e; }
-        .text-emerald-600 { color: #059669; }
-        .dark .text-emerald-400 { color: #34d399; }
-        .text-amber-600 { color: #d97706; }
-        .dark .text-amber-400 { color: #fbbf24; }
+    @media (min-width: 768px) { .container { max-width: 768px; } }
+    @media (min-width: 1024px) { .container { max-width: 1024px; padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 1280px) { .container { max-width: 1280px; } }
+    @media (min-width: 1536px) { .container { max-width: 1536px; } }
 
-        .z-50 { z-index: 50; }
-        .z-10 { z-index: 10; }
-        .-z-10 { z-index: -10; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--background); }
+    ::-webkit-scrollbar-thumb {
+      background: #c5c5c5;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+    
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #c5c5c5 var(--background);
+    }
 
-        .container {
-            width: 100%;
-            margin-right: auto;
-            margin-left: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
+    /* Logo path styling */
+    .logo-path { fill: var(--accent); }
+    .dark .logo-path { fill: white; }
+    .logo-path-special { fill: #0F0F0F; }
+    .dark .logo-path-special { fill: var(--accent); }
 
-        @media (min-width: 640px) {
-            .container {
-                max-width: 640px;
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-            }
-        }
+    /* Button styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-duration: 200ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      cursor: pointer;
+    }
 
-        @media (min-width: 768px) { .container { max-width: 768px; } }
-        @media (min-width: 1024px) { .container { max-width: 1024px; padding-left: 2rem; padding-right: 2rem; } }
-        @media (min-width: 1280px) { .container { max-width: 1280px; } }
-        @media (min-width: 1536px) { .container { max-width: 1536px; } }
+    .btn-default {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      height: 2.75rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: var(--background); }
-        ::-webkit-scrollbar-thumb {
-            background: #c5c5c5;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+    .btn-default:hover {
+      background-color: rgba(23, 23, 23, 0.9);
+    }
 
-        html {
-            scrollbar-width: thin;
-            scrollbar-color: #c5c5c5 var(--background);
-        }
+    .dark .btn-default:hover {
+      background-color: rgba(247, 247, 247, 0.9);
+    }
 
-        /* Logo path styling */
-        .logo-path { fill: var(--accent); }
-        .dark .logo-path { fill: white; }
-        .logo-path-special { fill: #0F0F0F; }
-        .dark .logo-path-special { fill: var(--accent); }
+    .btn-outline {
+      border: 1px solid var(--input);
+      background-color: var(--background);
+      color: var(--foreground);
+      height: 2.75rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
 
-        /* Button styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-            transition-duration: 200ms;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            outline: 2px solid transparent;
-            outline-offset: 2px;
-            cursor: pointer;
-        }
+    .btn-outline:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
 
-        .btn-default {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            height: 2.75rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
+    /* Responsive helpers */
+    @media (max-width: 639px) { 
+      .sm\:pt-10 { padding-top: 1rem; } /* 16px on mobile */
+      .sm\:px-6 { padding-left: 1rem; padding-right: 1rem; }
+    }
+    @media (min-width: 640px) {
+      .sm\:pt-10 { padding-top: 2.5rem; }
+      .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+      .sm\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .sm\:flex-row { flex-direction: row; }
+      .sm\:py-32 { padding-top: 8rem; padding-bottom: 8rem; }
+    }
+    @media (min-width: 768px) { 
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .md\:hidden { display: none; }
+      .md\:block { display: block; }
+      .md\:flex { display: flex; }
+      .md\:flex-row { flex-direction: row; }
+      .md\:flex-row-reverse { flex-direction: row-reverse; }
+      .md\:ml-0 { margin-left: 0; }
+      .md\:mr-\[calc\(50\%\+3rem\)\] { margin-right: calc(50% + 3rem); }
+      .md\:ml-\[calc\(50\%\+3rem\)\] { margin-left: calc(50% + 3rem); }
+    }
+    @media (min-width: 1024px) { 
+      .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+      .lg\:text-7xl { font-size: 4.5rem; line-height: 1; } 
+    }
 
-        .btn-default:hover {
-            background-color: rgba(23, 23, 23, 0.9);
-        }
+    /* Spacing helpers */
+    .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+    .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 2rem; }
+    .space-y-12 > :not([hidden]) ~ :not([hidden]) { margin-top: 3rem; }
 
-        .dark .btn-default:hover {
-            background-color: rgba(247, 247, 247, 0.9);
-        }
-
-        .btn-outline {
-            border: 1px solid var(--input);
-            background-color: var(--background);
-            color: var(--foreground);
-            height: 2.75rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--accent);
-            color: var(--accent-foreground);
-        }
-
-        /* Responsive helpers */
-        @media (max-width: 639px) {
-            .sm\:pt-10 { padding-top: 1rem; } /* 16px on mobile */
-            .sm\:px-6 { padding-left: 1rem; padding-right: 1rem; }
-        }
-        @media (min-width: 640px) {
-            .sm\:pt-10 { padding-top: 2.5rem; }
-            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-            .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
-            .sm\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
-            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .sm\:flex-row { flex-direction: row; }
-            .sm\:py-32 { padding-top: 8rem; padding-bottom: 8rem; }
-        }
-        @media (min-width: 768px) {
-            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .md\:hidden { display: none; }
-            .md\:block { display: block; }
-            .md\:flex { display: flex; }
-            .md\:flex-row { flex-direction: row; }
-            .md\:flex-row-reverse { flex-direction: row-reverse; }
-            .md\:ml-0 { margin-left: 0; }
-            .md\:mr-\[calc\(50\%\+3rem\)\] { margin-right: calc(50% + 3rem); }
-            .md\:ml-\[calc\(50\%\+3rem\)\] { margin-left: calc(50% + 3rem); }
-        }
-        @media (min-width: 1024px) {
-            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
-            .lg\:text-7xl { font-size: 4.5rem; line-height: 1; }
-        }
-
-        /* Spacing helpers */
-        .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
-        .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 2rem; }
-        .space-y-12 > :not([hidden]) ~ :not([hidden]) { margin-top: 3rem; }
-
-        /* Layout helpers */
-        .min-h-screen { min-height: 100vh; }
-        .pt-16 { padding-top: 4rem; }
-        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
-        .gap-6 { gap: 1.5rem; }
-        .gap-4 { gap: 1rem; }
-        .gap-2 { gap: 0.5rem; }
-        .max-w-4xl { max-width: 56rem; }
-        .max-w-3xl { max-width: 48rem; }
-        .max-w-2xl { max-width: 42rem; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
-        .text-center { text-align: center; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .flex { display: flex; }
-        .grid { display: grid; }
-        .hidden { display: none; }
-        .block { display: block; }
-        .relative { position: relative; }
-        .absolute { position: absolute; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .overflow-hidden { overflow: hidden; }
-        .overflow-x-auto { overflow-x: auto; }
-        .min-w-max { min-width: max-content; }
-        .group { position: relative; }
-        .group:hover .group-hover\:opacity-100 { opacity: 1; }
-        .transition-opacity {
-            transition-property: opacity;
-            transition-duration: 200ms;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .opacity-0 { opacity: 0; }
-        .opacity-100 { opacity: 1; }
-        .opacity-50 { opacity: 0.5; }
-        .pointer-events-none { pointer-events: none; }
-        .flex-1 { flex: 1 1 0%; }
-        .flex-shrink-0 { flex-shrink: 0; }
-        .inline-flex { display: inline-flex; }
-        .text-5xl { font-size: 3rem; line-height: 1; }
-        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .font-medium { font-weight: 500; }
-        .tracking-tight { letter-spacing: -0.025em; }
-        .p-6 { padding: 1.5rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-        .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
-        .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
-        .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
-        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .px-8 { padding-left: 2rem; padding-right: 2rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 0.75rem; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-1 { margin-bottom: 0.25rem; }
-        .mt-16 { margin-top: 4rem; }
-        .mt-2 { margin-top: 0.5rem; }
-        .mt-1 { margin-top: 0.25rem; }
-        .ml-20 { margin-left: 5rem; }
-        .ml-2 { margin-left: 0.5rem; }
-        .h-16 { height: 4rem; }
-        .h-12 { height: 3rem; }
-        .h-11 { height: 2.75rem; }
-        .h-10 { height: 2.5rem; }
-        .h-8 { height: 2rem; }
-        .h-7 { height: 1.75rem; }
-        .h-6 { height: 1.5rem; }
-        .h-5 { height: 1.25rem; }
-        .h-4 { height: 1rem; }
-        .h-3 { height: 0.75rem; }
-        .h-\[800px\] { height: 800px; }
-        .w-16 { width: 4rem; }
-        .w-12 { width: 3rem; }
-        .w-10 { width: 2.5rem; }
-        .w-8 { width: 2rem; }
-        .w-5 { width: 1.25rem; }
-        .w-4 { width: 1rem; }
-        .w-3 { width: 0.75rem; }
-        .w-0\.5 { width: 0.125rem; }
-        .w-\[800px\] { width: 800px; }
-        .w-full { width: 100%; }
-        .min-w-\[200px\] { min-width: 200px; }
-        .transform { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
-        .-translate-x-1\/2 { transform: translateX(-50%); }
-        .-translate-y-1\/2 { transform: translateY(-50%); }
-        .blur-3xl { filter: blur(128px); }
-        .blur-md { filter: blur(4px); }
-    </style>
+    /* Layout helpers */
+    .min-h-screen { min-height: 100vh; }
+    .pt-16 { padding-top: 4rem; }
+    .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+    .gap-6 { gap: 1.5rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-2 { gap: 0.5rem; }
+    .max-w-4xl { max-width: 56rem; }
+    .max-w-3xl { max-width: 48rem; }
+    .max-w-2xl { max-width: 42rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .text-center { text-align: center; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .flex { display: flex; }
+    .grid { display: grid; }
+    .hidden { display: none; }
+    .block { display: block; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-x-auto { overflow-x: auto; }
+    .min-w-max { min-width: max-content; }
+    .group { position: relative; }
+    .group:hover .group-hover\:opacity-100 { opacity: 1; }
+    .transition-opacity {
+      transition-property: opacity;
+      transition-duration: 200ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .opacity-0 { opacity: 0; }
+    .opacity-100 { opacity: 1; }
+    .opacity-50 { opacity: 0.5; }
+    .pointer-events-none { pointer-events: none; }
+    .flex-1 { flex: 1 1 0%; }
+    .flex-shrink-0 { flex-shrink: 0; }
+    .inline-flex { display: inline-flex; }
+    .text-5xl { font-size: 3rem; line-height: 1; }
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .font-medium { font-weight: 500; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .p-6 { padding: 1.5rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+    .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+    .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mt-16 { margin-top: 4rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-1 { margin-top: 0.25rem; }
+    .ml-20 { margin-left: 5rem; }
+    .ml-2 { margin-left: 0.5rem; }
+    .h-16 { height: 4rem; }
+    .h-12 { height: 3rem; }
+    .h-11 { height: 2.75rem; }
+    .h-10 { height: 2.5rem; }
+    .h-8 { height: 2rem; }
+    .h-7 { height: 1.75rem; }
+    .h-6 { height: 1.5rem; }
+    .h-5 { height: 1.25rem; }
+    .h-4 { height: 1rem; }
+    .h-3 { height: 0.75rem; }
+    .h-\[800px\] { height: 800px; }
+    .w-16 { width: 4rem; }
+    .w-12 { width: 3rem; }
+    .w-10 { width: 2.5rem; }
+    .w-8 { width: 2rem; }
+    .w-5 { width: 1.25rem; }
+    .w-4 { width: 1rem; }
+    .w-3 { width: 0.75rem; }
+    .w-0\.5 { width: 0.125rem; }
+    .w-\[800px\] { width: 800px; }
+    .w-full { width: 100%; }
+    .min-w-\[200px\] { min-width: 200px; }
+    .transform { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+    .-translate-x-1\/2 { transform: translateX(-50%); }
+    .-translate-y-1\/2 { transform: translateY(-50%); }
+    .blur-3xl { filter: blur(128px); }
+    .blur-md { filter: blur(4px); }
+  </style>
 </head>
 <body class="min-h-screen bg-background text-foreground">
-<!-- Navbar -->
-<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent border-border">
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent border-border">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex items-center gap-3">
-                <!-- PHP Logo -->
-                <svg
-                        width="130"
-                        height="60"
-                        viewBox="0 0 467 133"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-12 w-auto"
-                        id="php-logo"
-                >
-                    <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M21.7998 125.799H0.799805L19.4998 29.6992H59.7998C71.8998 29.6992 80.7998 32.8992 86.2998 39.1992C91.8998 45.5992 93.4998 54.3992 91.2998 65.8992C90.3998 70.5992 88.7998 74.8992 86.6998 78.7992C84.4998 82.6992 81.6998 86.2992 78.1998 89.4992C73.9998 93.3992 69.3998 96.1992 64.2998 97.8992C59.1998 99.5992 52.6998 100.399 44.6998 100.399H26.6998L21.7998 125.799ZM67.6998 49.1992C64.9998 46.2992 59.6998 44.7992 51.7998 44.7992H37.4998L29.6998 85.0992H42.3998C50.7998 85.0992 57.0998 83.4992 61.2998 80.2992C65.3998 77.0992 68.1998 71.7992 69.6998 64.3992C70.9998 57.1992 70.2998 52.1992 67.6998 49.1992Z"
-                            class="logo-path"
-                    />
-                    <path
-                            d="M106.6 4.09961H127.4L122.4 29.6996H140.9C152.6 29.6996 160.6 31.6996 165 35.7996C169.4 39.8996 170.8 46.4996 169 55.5996L160.3 100.4H139.2L147.5 57.7996C148.4 52.9996 148.1 49.6996 146.5 47.8996C144.9 46.0996 141.4 45.2996 136.1 45.2996H119.5L108.8 100.4H87.9004L106.6 4.09961Z"
-                            class="logo-path"
-                    />
-                    <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M185.2 125.799H164.2L182.9 29.6992H223.3C235.4 29.6992 244.3 32.8992 249.8 39.1992C255.4 45.5992 257 54.3992 254.8 65.8992C253.9 70.5992 252.3 74.8992 250.2 78.7992C248 82.6992 245.2 86.2992 241.7 89.4992C237.5 93.3992 232.9 96.1992 227.8 97.8992C222.7 99.5992 216.2 100.399 208.2 100.399H190.2L185.2 125.799ZM231.2 49.1992C228.5 46.2992 223.2 44.7992 215.3 44.7992H200.9L193.1 85.0992H205.8C214.2 85.0992 220.5 83.4992 224.7 80.2992C228.8 77.0992 231.6 71.7992 233.1 64.3992C234.4 57.1992 233.8 52.1992 231.2 49.1992Z"
-                            class="logo-path"
-                    />
-                    <path
-                            d="M317.5 48.5C311.8 34.9 307 23.1 311.7 14.9C313.5 12.4 315.5 11.1 317.7 11.1C322.2 11.1 326.3 16 326.3 16L332 22.9L328.4 14.7C328.2 14.4 322.1 0.5 311.2 0.5C307.4 0.5 303.4 2.2 299.5 5.6L299.4 5.7C289.9 16.7 299.2 37.5 307.5 55.8L313.6 70C316.4 77.3 319.2 86 317.5 92.4C314.9 102.4 306 109.2 305.9 109.3L300.2 113.7L307.1 111.5C307.8 111.3 323.1 106.3 326.8 93C329.1 82.1 326.2 71.2 323.3 62.8C323.7 62.5 322.9 63.1 323.3 62.8L318 49.1"
-                            class="logo-path-special"
-                    />
-                    <path
-                            d="M334.4 9.89961L327.3 2.09961L332.4 11.3996C332.5 11.4996 338.7 23.0996 330.8 36.5996C327.9 40.7996 323.4 44.9996 317.7 49.1996L307.4 55.8996C307.3 55.7996 307.3 55.6996 307.4 55.8996L307 56.1996C295.5 62.7996 284.8 66.7996 284.6 66.8996C268.7 73.9996 258.7 84.9996 257.3 97.1996C256.2 106.4 260.5 115.4 268.9 121.7L269 121.8C274.3 125 280 126.6 286 126.6C301.7 126.6 314 115.7 314.5 115.2L322.2 108.3L313.1 113.1C313 113.1 305.4 117.1 297.5 117.1C290.4 117.1 285.4 114 282.4 107.7C278.6 94.2996 291.9 85.0996 307.2 74.4996C309.2 73.0996 311.3 71.5996 313.4 70.1996L313.5 70.0996L322.6 63.2996C322.7 63.0996 323 62.8996 323 62.8996C330.5 56.6996 340.4 46.9996 342.7 33.3996C344.5 21.0996 334.8 10.3996 334.4 9.89961Z"
-                            class="logo-path-special"
-                    />
-                    <path
-                            d="M345.4 83H364.9L361.4 100.7H341.9L345.4 83Z"
-                            class="logo-path"
-                    />
-                    <path
-                            d="M375.68 86.24H417.44C419.28 86.32 421.04 86.2 422.72 85.88C424.4 85.48 425.96 84.92 427.4 84.2C428.76 83.48 429.96 82.4 431 80.96C432.04 79.52 432.84 77.72 433.4 75.56C434.04 73.4 434.2 71.6 433.88 70.16C433.64 68.72 433.04 67.64 432.08 66.92C431.04 66.2 429.76 65.68 428.24 65.36C426.8 64.96 425.12 64.76 423.2 64.76L381.56 64.64L394.88 14.84H466.52L462.56 29.6H410L404.6 49.88H435.44C439.44 49.96 442.88 50.56 445.76 51.68C448.64 52.8 450.96 54.44 452.72 56.6C454.48 58.76 455.52 61.44 455.84 64.64C456.16 67.76 455.76 71.4 454.64 75.56C453.36 80.36 451.52 84.44 449.12 87.8C446.8 91.08 444 93.64 440.72 95.48C437.36 97.32 433.76 98.72 429.92 99.68C426.08 100.56 422 101 417.68 101H371.84L375.68 86.24Z"
-                            class="logo-path"
-                    />
-                </svg>
-            </div>
-
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center gap-6" id="desktop-nav">
-                <a href="#features" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Features</a>
-                <a href="#timeline" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Timeline</a>
-                <a href="#migration" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Migration</a>
-                <a href="#downloads" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Download</a>
-
-                <!-- Search Button -->
-                <button id="search-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
-                    <i data-lucide="search" class="h-5 w-5"></i>
-                </button>
-
-                <!-- Search Input (hidden by default) -->
-                <div id="search-container" class="hidden animate-fade-in">
-                    <input
-                            type="text"
-                            id="search-input"
-                            placeholder="Search documentation..."
-                            class="w-64 px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground"
-                    />
-                </div>
-
-                <!-- Language Selector -->
-                <div class="relative group">
-                    <button id="language-toggle" class="flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted">
-                        <i data-lucide="globe" class="h-5 w-5"></i>
-                        <span class="text-xs font-medium uppercase">en</span>
-                    </button>
-                    <div id="language-dropdown" class="absolute right-0 mt-2 w-40 rounded-md bg-background border border-border shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground font-medium">English</button>
-                        <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Español</button>
-                        <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Français</button>
-                        <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Deutsch</button>
-                        <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Italiano</button>
-                    </div>
-                </div>
-
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
-                    <i data-lucide="moon" class="h-5 w-5" id="theme-icon"></i>
-                </button>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden flex items-center gap-2 mt-4">
-                <button id="mobile-theme-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
-                    <i data-lucide="moon" class="h-5 w-5" id="mobile-theme-icon"></i>
-                </button>
-                <button id="mobile-menu-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
-                    <i data-lucide="menu" class="h-6 w-6"></i>
-                </button>
-            </div>
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <!-- PHP Elephant Icon with Text -->
+          <div class="flex items-center gap-2">
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 360.000000 360.000000" 
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+            >
+              <g transform="translate(0.000000,360.000000) scale(0.100000,-0.100000)" fill="var(--accent)">
+                <path d="M1792 2990 c-183 -39 -274 -159 -288 -379 -8 -116 6 -213 47 -336 62 -185 167 -359 291 -483 112 -112 258 -175 287 -124 15 26 13 8 -5 -36 -20 -51 -52 -67 -133 -67 -90 1 -151 35 -266 150 -225 225 -375 566 -375 850 0 44 9 123 20 175 11 52 20 98 20 103 0 14 -414 8 -490 -8 -224 -47 -398 -185 -504 -399 -61 -121 -86 -223 -93 -371 -9 -190 9 -265 146 -602 103 -255 138 -443 148 -786 l6 -227 299 0 298 0 0 375 0 375 150 0 150 0 0 -375 0 -375 300 0 300 0 0 168 c0 370 47 706 120 869 70 153 167 197 286 128 113 -66 194 -276 194 -503 0 -113 -31 -165 -119 -201 -31 -13 -31 -14 -31 -89 l0 -75 88 6 c139 9 284 72 376 163 116 116 205 357 257 700 32 206 32 511 2 659 -26 123 -71 244 -122 321 -78 121 -211 216 -339 243 -144 30 -398 -5 -511 -70 -18 -11 -34 -19 -36 -17 -1 2 -12 26 -25 53 -35 73 -104 138 -176 164 -67 26 -202 36 -272 21z m1183 -915 c14 -13 25 -36 25 -50 0 -33 -42 -75 -75 -75 -33 0 -75 42 -75 75 0 33 42 75 75 75 14 0 37 -11 50 -25z" class="logo-path"/>
+              </g>
+            </svg>
+            <span class="font-bold text-lg">PHP</span>
+          </div>
         </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-6" id="desktop-nav">
+          <a href="#features" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Features</a>
+          <a href="#timeline" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Timeline</a>
+          <a href="#migration" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Migration</a>
+          <a href="#downloads" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Download</a>
+          
+          <!-- Search Button -->
+          <button id="search-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
+            <i data-lucide="search" class="h-5 w-5"></i>
+          </button>
+          
+          <!-- Search Input (hidden by default) -->
+          <div id="search-container" class="hidden animate-fade-in">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Search documentation..." 
+              class="w-64 px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground"
+            />
+          </div>
+          
+          <!-- Language Selector -->
+          <div class="relative group">
+            <button id="language-toggle" class="flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted">
+              <i data-lucide="globe" class="h-5 w-5"></i>
+              <span class="text-xs font-medium uppercase">en</span>
+            </button>
+            <div id="language-dropdown" class="absolute right-0 mt-2 w-40 rounded-md bg-background border border-border shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground font-medium">English</button>
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Español</button>
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Français</button>
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Deutsch</button>
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Italiano</button>
+            </div>
+          </div>
+          
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
+            <i data-lucide="moon" class="h-5 w-5" id="theme-icon"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center gap-2 mt-4">
+          <button id="mobile-theme-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
+            <i data-lucide="moon" class="h-5 w-5" id="mobile-theme-icon"></i>
+          </button>
+          <button id="mobile-menu-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
+            <i data-lucide="menu" class="h-6 w-6"></i>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden hidden animate-slide-down bg-background border-b border-border">
-        <div class="px-4 pt-2 pb-4 space-y-2">
-            <div class="mb-3">
-                <input type="text" placeholder="Search documentation..." class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground">
-            </div>
-            <a href="#features" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Features</a>
-            <a href="#timeline" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Timeline</a>
-            <a href="#migration" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Migration</a>
-            <a href="#downloads" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Download</a>
-
-            <!-- Mobile Language Selector -->
-            <div class="pt-2">
-                <div class="text-xs font-medium text-muted-foreground uppercase px-3 py-1">Language</div>
-                <div class="grid grid-cols-3 gap-2 px-3">
-                    <button class="text-sm px-3 py-2 rounded-md bg-accent text-accent-foreground font-medium">English</button>
-                    <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Español</button>
-                    <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Français</button>
-                    <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Deutsch</button>
-                    <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Italiano</button>
-                </div>
-            </div>
+      <div class="px-4 pt-2 pb-4 space-y-2">
+        <div class="mb-3">
+          <input type="text" placeholder="Search documentation..." class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground">
         </div>
+        <a href="#features" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Features</a>
+        <a href="#timeline" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Timeline</a>
+        <a href="#migration" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Migration</a>
+        <a href="#downloads" class="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors">Download</a>
+        
+        <!-- Mobile Language Selector -->
+        <div class="pt-2">
+          <div class="text-xs font-medium text-muted-foreground uppercase px-3 py-1">Language</div>
+          <div class="grid grid-cols-3 gap-2 px-3">
+            <button class="text-sm px-3 py-2 rounded-md bg-accent text-accent-foreground font-medium">English</button>
+            <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Español</button>
+            <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Français</button>
+            <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Deutsch</button>
+            <button class="text-sm px-3 py-2 rounded-md bg-muted text-foreground">Italiano</button>
+          </div>
+        </div>
+      </div>
     </div>
-</nav>
+  </nav>
 
-<!-- Hero Section -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
     <!-- Animated gradient background -->
     <div class="absolute inset-0 opacity-50"
          style="background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end), var(--gradient-start));
                 background-size: 200% 200%;
                 animation: gradient-shift 15s ease infinite;">
     </div>
-
+    
     <!-- Subtle glow effect -->
     <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl"></div>
     </div>
 
     <div class="container relative z-10 px-4 pt-4 sm:pt-10 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto text-center animate-fade-in-up">
-            <div class="inline-flex items-center gap-2 px-4 py-2 border border-accent/20 rounded-full text-sm font-medium text-accent mb-8 relative"
-                 style="animation: badge-glow 2s ease-in-out infinite">
-                New Release
-                <!-- Enhanced glow effect -->
-                <div class="absolute inset-0 rounded-full animate-pulse bg-accent/20 blur-md -z-10"></div>
-            </div>
-
-            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-                PHP 8.5
-            </h1>
-
-            <p class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Refined developer experience with new utility functions, enhanced debugging, and modern syntax improvements
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button class="btn btn-default gap-2 min-w-[200px]">
-                    <i data-lucide="download" class="h-5 w-5"></i>
-                    Download PHP 8.5
-                </button>
-                <button class="btn btn-outline gap-2 min-w-[200px]">
-                    <i data-lucide="file-text" class="h-5 w-5"></i>
-                    Migration Guide
-                </button>
-            </div>
-
-            <!-- Release Info -->
-            <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
-                    <div class="text-sm font-medium text-muted-foreground mb-1">Release Date</div>
-                    <div class="text-lg font-semibold">November 20, 2025</div>
-                </div>
-                <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
-                    <div class="text-sm font-medium text-muted-foreground mb-1">Support Until</div>
-                    <div class="text-lg font-semibold">November 2027</div>
-                </div>
-                <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
-                    <div class="text-sm font-medium text-muted-foreground mb-1">Security Fixes Until</div>
-                    <div class="text-lg font-semibold">November 2028</div>
-                </div>
-            </div>
+      <div class="max-w-4xl mx-auto text-center animate-fade-in-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 border border-accent/20 rounded-full text-sm font-medium text-accent mb-8 relative"
+             style="animation: badge-glow 2s ease-in-out infinite">
+          New Release
+          <!-- Enhanced glow effect -->
+          <div class="absolute inset-0 rounded-full animate-pulse bg-accent/20 blur-md -z-10"></div>
         </div>
+        
+        <!-- PHP 8.5 Logo in Hero Section -->
+        <div class="mb-6 flex justify-center">
+          <svg 
+            width="300" 
+            height="80" 
+            viewBox="0 0 467 133" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-20 w-auto"
+          >
+            <path 
+              fillRule="evenodd" 
+              clipRule="evenodd" 
+              d="M21.7998 125.799H0.799805L19.4998 29.6992H59.7998C71.8998 29.6992 80.7998 32.8992 86.2998 39.1992C91.8998 45.5992 93.4998 54.3992 91.2998 65.8992C90.3998 70.5992 88.7998 74.8992 86.6998 78.7992C84.4998 82.6992 81.6998 86.2992 78.1998 89.4992C73.9998 93.3992 69.3998 96.1992 64.2998 97.8992C59.1998 99.5992 52.6998 100.399 44.6998 100.399H26.6998L21.7998 125.799ZM67.6998 49.1992C64.9998 46.2992 59.6998 44.7992 51.7998 44.7992H37.4998L29.6998 85.0992H42.3998C50.7998 85.0992 57.0998 83.4992 61.2998 80.2992C65.3998 77.0992 68.1998 71.7992 69.6998 64.3992C70.9998 57.1992 70.2998 52.1992 67.6998 49.1992Z" 
+              class="logo-path"
+            />
+            <path 
+              d="M106.6 4.09961H127.4L122.4 29.6996H140.9C152.6 29.6996 160.6 31.6996 165 35.7996C169.4 39.8996 170.8 46.4996 169 55.5996L160.3 100.4H139.2L147.5 57.7996C148.4 52.9996 148.1 49.6996 146.5 47.8996C144.9 46.0996 141.4 45.2996 136.1 45.2996H119.5L108.8 100.4H87.9004L106.6 4.09961Z" 
+              class="logo-path"
+            />
+            <path 
+              fillRule="evenodd" 
+              clipRule="evenodd" 
+              d="M185.2 125.799H164.2L182.9 29.6992H223.3C235.4 29.6992 244.3 32.8992 249.8 39.1992C255.4 45.5992 257 54.3992 254.8 65.8992C253.9 70.5992 252.3 74.8992 250.2 78.7992C248 82.6992 245.2 86.2992 241.7 89.4992C237.5 93.3992 232.9 96.1992 227.8 97.8992C222.7 99.5992 216.2 100.399 208.2 100.399H190.2L185.2 125.799ZM231.2 49.1992C228.5 46.2992 223.2 44.7992 215.3 44.7992H200.9L193.1 85.0992H205.8C214.2 85.0992 220.5 83.4992 224.7 80.2992C228.8 77.0992 231.6 71.7992 233.1 64.3992C234.4 57.1992 233.8 52.1992 231.2 49.1992Z" 
+              class="logo-path"
+            />
+            <path 
+              d="M317.5 48.5C311.8 34.9 307 23.1 311.7 14.9C313.5 12.4 315.5 11.1 317.7 11.1C322.2 11.1 326.3 16 326.3 16L332 22.9L328.4 14.7C328.2 14.4 322.1 0.5 311.2 0.5C307.4 0.5 303.4 2.2 299.5 5.6L299.4 5.7C289.9 16.7 299.2 37.5 307.5 55.8L313.6 70C316.4 77.3 319.2 86 317.5 92.4C314.9 102.4 306 109.2 305.9 109.3L300.2 113.7L307.1 111.5C307.8 111.3 323.1 106.3 326.8 93C329.1 82.1 326.2 71.2 323.3 62.8C323.7 62.5 322.9 63.1 323.3 62.8L318 49.1" 
+              class="logo-path-special"
+            />
+            <path 
+              d="M334.4 9.89961L327.3 2.09961L332.4 11.3996C332.5 11.4996 338.7 23.0996 330.8 36.5996C327.9 40.7996 323.4 44.9996 317.7 49.1996L307.4 55.8996C307.3 55.7996 307.3 55.6996 307.4 55.8996L307 56.1996C295.5 62.7996 284.8 66.7996 284.6 66.8996C268.7 73.9996 258.7 84.9996 257.3 97.1996C256.2 106.4 260.5 115.4 268.9 121.7L269 121.8C274.3 125 280 126.6 286 126.6C301.7 126.6 314 115.7 314.5 115.2L322.2 108.3L313.1 113.1C313 113.1 305.4 117.1 297.5 117.1C290.4 117.1 285.4 114 282.4 107.7C278.6 94.2996 291.9 85.0996 307.2 74.4996C309.2 73.0996 311.3 71.5996 313.4 70.1996L313.5 70.0996L322.6 63.2996C322.7 63.0996 323 62.8996 323 62.8996C330.5 56.6996 340.4 46.9996 342.7 33.3996C344.5 21.0996 334.8 10.3996 334.4 9.89961Z" 
+              class="logo-path-special"
+            />
+            <path 
+              d="M345.4 83H364.9L361.4 100.7H341.9L345.4 83Z" 
+              class="logo-path"
+            />
+            <path 
+              d="M375.68 86.24H417.44C419.28 86.32 421.04 86.2 422.72 85.88C424.4 85.48 425.96 84.92 427.4 84.2C428.76 83.48 429.96 82.4 431 80.96C432.04 79.52 432.84 77.72 433.4 75.56C434.04 73.4 434.2 71.6 433.88 70.16C433.64 68.72 433.04 67.64 432.08 66.92C431.04 66.2 429.76 65.68 428.24 65.36C426.8 64.96 425.12 64.76 423.2 64.76L381.56 64.64L394.88 14.84H466.52L462.56 29.6H410L404.6 49.88H435.44C439.44 49.96 442.88 50.56 445.76 51.68C448.64 52.8 450.96 54.44 452.72 56.6C454.48 58.76 455.52 61.44 455.84 64.64C456.16 67.76 455.76 71.4 454.64 75.56C453.36 80.36 451.52 84.44 449.12 87.8C446.8 91.08 444 93.64 440.72 95.48C437.36 97.32 433.76 98.72 429.92 99.68C426.08 100.56 422 101 417.68 101H371.84L375.68 86.24Z" 
+              class="logo-path"
+            />
+          </svg>
+        </div>
+        
+        <p class="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          Refined developer experience with new utility functions, enhanced debugging, and modern syntax improvements
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <button class="btn btn-default gap-2 min-w-[200px]">
+            <i data-lucide="download" class="h-5 w-5"></i>
+            Download PHP 8.5
+          </button>
+          <button class="btn btn-outline gap-2 min-w-[200px]">
+            <i data-lucide="file-text" class="h-5 w-5"></i>
+            Migration Guide
+          </button>
+        </div>
+
+        <!-- Release Info -->
+        <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
+            <div class="text-sm font-medium text-muted-foreground mb-1">Release Date</div>
+            <div class="text-lg font-semibold">November 20, 2025</div>
+          </div>
+          <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
+            <div class="text-sm font-medium text-muted-foreground mb-1">Support Until</div>
+            <div class="text-lg font-semibold">November 2027</div>
+          </div>
+          <div class="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6">
+            <div class="text-sm font-medium text-muted-foreground mb-1">Security Fixes Until</div>
+            <div class="text-lg font-semibold">November 2028</div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Features Section -->
-<section id="features" class="py-20 sm:py-32">
+  <!-- Features Section -->
+  <section id="features" class="py-20 sm:py-32">
     <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                What's New in PHP 8.5
-            </h2>
-            <p class="text-xl text-muted-foreground">
-                Major improvements with modern syntax, better APIs, and enhanced developer experience
-            </p>
-        </div>
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+          What's New in PHP 8.5
+        </h2>
+        <p class="text-xl text-muted-foreground">
+          Major improvements with modern syntax, better APIs, and enhanced developer experience
+        </p>
+      </div>
 
-        <div class="space-y-8 max-w-6xl mx-auto">
-            <!-- Feature 1: RFC 3986 and WHATWG URL Compliant API -->
-            <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h3 class="text-2xl font-bold">RFC 3986 and WHATWG URL Compliant API</h3>
-                        <a href="https://wiki.php.net/rfc/rfc3986_url" target="_blank" rel="noopener noreferrer" class="inline-block">
+      <div class="space-y-8 max-w-6xl mx-auto">
+        <!-- Feature 1: RFC 3986 and WHATWG URL Compliant API -->
+        <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-2xl font-bold">RFC 3986 and WHATWG URL Compliant API</h3>
+              <a href="https://wiki.php.net/rfc/rfc3986_url" target="_blank" rel="noopener noreferrer" class="inline-block">
                 <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-2.5 py-0.5">
                   RFC <i data-lucide="external-link" class="h-3 w-3"></i>
                 </span>
-                        </a>
-                    </div>
-                    <p class="text-muted-foreground">New URI extension providing standards-compliant URL parsing with modern object-oriented API</p>
-                </div>
+              </a>
+            </div>
+            <p class="text-muted-foreground">New URI extension providing standards-compliant URL parsing with modern object-oriented API</p>
+          </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="old-code-1">$components = parse_url("https://php.net/releases/8.5/en.php");
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="old-code-1">$components = parse_url("https://php.net/releases/8.5/en.php");
 
 var_dump($components['host']);
 // string(7) "php.net"</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-1', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="new-code-1">use Uri\Rfc3986\Uri;
+                </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-1', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="new-code-1">use Uri\Rfc3986\Uri;
 
 $uri = new Uri("https://php.net/releases/8.5/en.php");
 
 var_dump($uri->getHost());
 // string(7) "php.net"</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-1', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-1', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Feature 2: Clone with v2 -->
-            <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h3 class="text-2xl font-bold">Clone with v2</h3>
-                        <a href="https://wiki.php.net/rfc/clone_with_v2" target="_blank" rel="noopener noreferrer" class="inline-block">
+        <!-- Feature 2: Clone with v2 -->
+        <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-2xl font-bold">Clone with v2</h3>
+              <a href="https://wiki.php.net/rfc/clone_with_v2" target="_blank" rel="noopener noreferrer" class="inline-block">
                 <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-2.5 py-0.5">
                   RFC <i data-lucide="external-link" class="h-3 w-3"></i>
                 </span>
-                        </a>
-                    </div>
-                    <p class="text-muted-foreground">Modify properties while cloning, perfect for readonly properties and immutable objects</p>
-                </div>
+              </a>
+            </div>
+            <p class="text-muted-foreground">Modify properties while cloning, perfect for readonly properties and immutable objects</p>
+          </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="old-code-2">final readonly class PhpVersion {
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="old-code-2">final readonly class PhpVersion {
   public function __construct(
     public string $version = 'PHP 8.4',
   ) {}
@@ -862,15 +888,17 @@ var_dump($uri->getHost());
 
 var_dump(new PhpVersion()->withVersion('PHP 8.5'));
 // Fatal error: Cannot modify readonly property</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-2', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="new-code-2">final readonly class PhpVersion {
+                </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-2', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="new-code-2">final readonly class PhpVersion {
   public function __construct(
     public string $version = 'PHP 8.4',
   ) {}
@@ -886,96 +914,104 @@ var_dump(
   $version->withVersion('PHP 8.5'),
   $version->version,
 );</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-2', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-2', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Feature 3: Pipe Operator -->
-            <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h3 class="text-2xl font-bold">Pipe Operator</h3>
-                        <a href="https://wiki.php.net/rfc/pipe-operator" target="_blank" rel="noopener noreferrer" class="inline-block">
+        <!-- Feature 3: Pipe Operator -->
+        <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-2xl font-bold">Pipe Operator</h3>
+              <a href="https://wiki.php.net/rfc/pipe-operator" target="_blank" rel="noopener noreferrer" class="inline-block">
                 <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-2.5 py-0.5">
                   RFC <i data-lucide="external-link" class="h-3 w-3"></i>
                 </span>
-                        </a>
-                    </div>
-                    <p class="text-muted-foreground">Chain function calls naturally with the new pipe operator for cleaner, more readable code</p>
-                </div>
+              </a>
+            </div>
+            <p class="text-muted-foreground">Chain function calls naturally with the new pipe operator for cleaner, more readable code</p>
+          </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="old-code-3">$input = ' Some kind of string. ';
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="old-code-3">$input = ' Some kind of string. ';
 
 $output = strtolower(
   str_replace(['.', '/', '…'], '',
-    str_replace(' ', '-',
+    str_replace(' ', '-', 
       trim($input)
     )
   )
 );</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-3', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="new-code-3">$input = ' Some kind of string. ';
+                </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-3', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="new-code-3">$input = ' Some kind of string. ';
 
 $output = $input
   |> trim(...)
   |> (fn (string $s) => str_replace(' ', '-', $s))
   |> (fn (string $s) => str_replace(['.', '/', '…'], '', $s))
   |> strtolower(...);</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-3', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-3', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Feature 4: New #[\NoDiscard] Attribute -->
-            <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h3 class="text-2xl font-bold">New #[\NoDiscard] Attribute</h3>
-                        <a href="https://wiki.php.net/rfc/nodiscard" target="_blank" rel="noopener noreferrer" class="inline-block">
+        <!-- Feature 4: New #[\NoDiscard] Attribute -->
+        <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-2xl font-bold">New #[\NoDiscard] Attribute</h3>
+              <a href="https://wiki.php.net/rfc/nodiscard" target="_blank" rel="noopener noreferrer" class="inline-block">
                 <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-2.5 py-0.5">
                   RFC <i data-lucide="external-link" class="h-3 w-3"></i>
                 </span>
-                        </a>
-                    </div>
-                    <p class="text-muted-foreground">Mark functions whose return values should not be ignored</p>
-                </div>
+              </a>
+            </div>
+            <p class="text-muted-foreground">Mark functions whose return values should not be ignored</p>
+          </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="old-code-4">function getPhpVersion(): string {
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="old-code-4">function getPhpVersion(): string {
   return 'PHP 8.4';
 }
 
 getPhpVersion(); // No Errors</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-4', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="new-code-4">#[\NoDiscard]
+                </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-4', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="new-code-4">#[\NoDiscard]
 function getPhpVersion(): string {
   return 'PHP 8.4';
 }
@@ -983,33 +1019,35 @@ function getPhpVersion(): string {
 getPhpVersion();
 // Warning: The return value should be used
 // or intentionally ignored by casting as (void)</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-4', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-4', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Feature 5: New array_first() and array_last() Functions -->
-            <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h3 class="text-2xl font-bold">New array_first() and array_last() Functions</h3>
-                        <a href="https://wiki.php.net/rfc/array_first_last" target="_blank" rel="noopener noreferrer" class="inline-block">
+        <!-- Feature 5: New array_first() and array_last() Functions -->
+        <div class="bg-card border border-border rounded-lg p-6 sm:p-8 space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-2xl font-bold">New array_first() and array_last() Functions</h3>
+              <a href="https://wiki.php.net/rfc/array_first_last" target="_blank" rel="noopener noreferrer" class="inline-block">
                 <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-2.5 py-0.5">
                   RFC <i data-lucide="external-link" class="h-3 w-3"></i>
                 </span>
-                        </a>
-                    </div>
-                    <p class="text-muted-foreground">Convenient functions to retrieve the first and last elements of arrays</p>
-                </div>
+              </a>
+            </div>
+            <p class="text-muted-foreground">Convenient functions to retrieve the first and last elements of arrays</p>
+          </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="old-code-5">$php = [
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-amber-600 dark:text-amber-400">PHP &lt; 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="old-code-5">$php = [
   'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
   'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
   'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
@@ -1025,15 +1063,17 @@ foreach ($php as $key => $version) {
 }
 
 var_dump($upcomingRelease);</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-5', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-2 min-w-0">
-                        <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
-                        <div class="overflow-x-auto rounded-lg relative group">
-                <pre class="!m-0"><code class="language-php block min-w-max" id="new-code-5">$php = [
+                </div>
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('old-code-5', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-2 min-w-0 flex flex-col">
+              <div class="text-sm font-medium px-1 text-emerald-600 dark:text-emerald-400">PHP 8.5</div>
+              <div class="code-block-container flex-1 relative group">
+                <div class="overflow-x-auto h-full">
+                  <pre class="!m-0 h-full"><code class="language-php block min-w-max h-full" id="new-code-5">$php = [
   'php-82' => ['state' => 'security', 'branch' => 'PHP-8.2'],
   'php-83' => ['state' => 'active', 'branch' => 'PHP-8.3'],
   'php-84' => ['state' => 'active', 'branch' => 'PHP-8.4'],
@@ -1048,546 +1088,547 @@ $upcomingRelease = array_first(
 );
 
 var_dump($upcomingRelease);</code></pre>
-                            <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-5', this)">
-                                <i data-lucide="copy" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Additional Features -->
-        <div class="mt-16 max-w-4xl mx-auto">
-            <h3 class="text-2xl font-bold mb-8 text-center">Additional New Features</h3>
-            <div class="grid sm:grid-cols-2 gap-6">
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">Property Promotion for Final Classes</h4>
-                    <p class="text-sm text-muted-foreground">Property promotion is now available for final class constructors</p>
-                </div>
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">Attributes for Constants</h4>
-                    <p class="text-sm text-muted-foreground">Constants now support attributes for better metadata</p>
-                </div>
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">#[\Override] for Properties</h4>
-                    <p class="text-sm text-muted-foreground">Better validation when overriding parent properties</p>
-                </div>
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">#[\Deprecated] for Traits</h4>
-                    <p class="text-sm text-muted-foreground">Mark legacy code with deprecation attributes</p>
-                </div>
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">Asymmetric Visibility</h4>
-                    <p class="text-sm text-muted-foreground">Fine-grained control over read/write access for static properties</p>
-                </div>
-                <div class="bg-card border border-border rounded-lg p-6">
-                    <h4 class="font-semibold mb-2">Handler Introspection</h4>
-                    <p class="text-sm text-muted-foreground">New functions for inspecting registered error handlers</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Timeline Section -->
-<section id="timeline" class="py-20 sm:py-32 bg-muted/30">
-    <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                Release Timeline
-            </h2>
-            <p class="text-xl text-muted-foreground">
-                PHP 8.5 development and support schedule
-            </p>
-        </div>
-
-        <div class="max-w-4xl mx-auto">
-            <div class="relative">
-                <!-- Timeline line -->
-                <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-border md:left-1/2 z-0"></div>
-
-                <div class="space-y-12">
-                    <!-- Phase 1 -->
-                    <div class="relative flex items-start gap-8 md:flex-row">
-                        <!-- Icon -->
-                        <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                            <i data-lucide="calendar" class="h-7 w-7 text-accent"></i>
-                        </div>
-
-                        <!-- Content -->
-                        <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:mr-[calc(50%+3rem)]">
-                            <div class="text-sm font-medium text-accent mb-1">Nov 2025</div>
-                            <h3 class="text-xl font-bold mb-1">GA Release</h3>
-                            <div class="text-sm font-medium text-muted-foreground mb-3">General Availability</div>
-                            <p class="text-muted-foreground">PHP 8.5.0 released with all new features and improvements.</p>
-                        </div>
-                    </div>
-
-                    <!-- Phase 2 -->
-                    <div class="relative flex items-start gap-8 md:flex-row-reverse">
-                        <!-- Icon -->
-                        <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                            <i data-lucide="shield" class="h-7 w-7 text-accent"></i>
-                        </div>
-
-                        <!-- Content -->
-                        <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:ml-[calc(50%+3rem)]">
-                            <div class="text-sm font-medium text-accent mb-1">Nov 2027</div>
-                            <h3 class="text-xl font-bold mb-1">End of Active Support</h3>
-                            <div class="text-sm font-medium text-muted-foreground mb-3">Active Support Ends</div>
-                            <p class="text-muted-foreground">Bug fixes and general maintenance will cease. Security fixes only.</p>
-                        </div>
-                    </div>
-
-                    <!-- Phase 3 -->
-                    <div class="relative flex items-start gap-8 md:flex-row">
-                        <!-- Icon -->
-                        <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                            <i data-lucide="x-circle" class="h-7 w-7 text-accent"></i>
-                        </div>
-
-                        <!-- Content -->
-                        <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:mr-[calc(50%+3rem)]">
-                            <div class="text-sm font-medium text-accent mb-1">Nov 2028</div>
-                            <h3 class="text-xl font-bold mb-1">End of Life</h3>
-                            <div class="text-sm font-medium text-muted-foreground mb-3">Security Support Ends</div>
-                            <p class="text-muted-foreground">PHP 8.5 reaches end of life. Please upgrade to a newer version.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Migration Section -->
-<section id="migration" class="py-20 sm:py-32">
-    <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                Migration Guide
-            </h2>
-            <p class="text-xl text-muted-foreground">
-                Upgrading to PHP 8.5 from earlier versions
-            </p>
-        </div>
-
-        <div class="max-w-4xl mx-auto space-y-8">
-            <!-- New Features -->
-            <div class="bg-card border border-border rounded-lg p-8">
-                <div class="flex items-start gap-4 mb-6">
-                    <div class="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
-                        <i data-lucide="target" class="h-6 w-6 text-accent"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2">🎯 New Features to Explore</h3>
-                    </div>
-                </div>
-                <ul class="space-y-3 text-muted-foreground">
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Start using the pipe operator for cleaner function chaining</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Replace verbose array access with array_first() and array_last()</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Leverage the new URI extension for standards-compliant URL parsing</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Use clone with syntax for immutable object patterns</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Apply #[\NoDiscard] attribute to critical functions</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-accent mt-1">•</span>
-                        <span>Use first-class callables in attributes for better testing</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Deprecations -->
-            <div class="bg-card border border-border rounded-lg p-8">
-                <div class="flex items-start gap-4 mb-6">
-                    <div class="flex-shrink-0 w-12 h-12 bg-destructive/10 rounded-lg flex items-center justify-center">
-                        <i data-lucide="alert-triangle" class="h-6 w-6 text-destructive"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2">⚠️ Deprecations</h3>
-                    </div>
-                </div>
-                <ul class="space-y-3 text-muted-foreground">
-                    <li class="flex gap-3">
-                        <span class="text-destructive mt-1">•</span>
-                        <span>Review deprecated features from PHP 8.4 that may be removed</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-destructive mt-1">•</span>
-                        <span>Check for warnings in your error logs during testing</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-destructive mt-1">•</span>
-                        <span>Plan to update code using deprecated functionality</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Testing -->
-            <div class="bg-card border border-border rounded-lg p-8">
-                <div class="flex items-start gap-4 mb-6">
-                    <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle-2" class="h-6 w-6 text-green-500"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2">✅ Testing Your Application</h3>
-                    </div>
-                </div>
-                <ul class="space-y-3 text-muted-foreground">
-                    <li class="flex gap-3">
-                        <span class="text-green-500 mt-1">•</span>
-                        <span>Run your test suite with PHP 8.5 in a staging environment</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-green-500 mt-1">•</span>
-                        <span>Enable error reporting to catch any deprecation notices</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-green-500 mt-1">•</span>
-                        <span>Update dependencies to versions compatible with PHP 8.5</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-green-500 mt-1">•</span>
-                        <span>Review release notes for breaking changes</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Download Section -->
-<section id="downloads" class="py-20 sm:py-32 bg-muted/30">
-    <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                Get PHP 8.5
-            </h2>
-            <p class="text-xl text-muted-foreground">
-                Download PHP 8.5 for your platform
-            </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
-                    <i data-lucide="code-2" class="h-8 w-8 text-accent"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Source Code</h3>
-                <p class="text-muted-foreground mb-6">Compile PHP 8.5 from source for maximum flexibility and customization.</p>
-                <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                    Download
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 hover:bg-background p-1 rounded" onclick="copyCode('new-code-5', this)">
+                  <i data-lucide="copy" class="h-4 w-4"></i>
                 </button>
+              </div>
             </div>
-
-            <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
-                    <i data-lucide="monitor" class="h-8 w-8 text-accent"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Windows</h3>
-                <p class="text-muted-foreground mb-6">Pre-built binaries for Windows, including thread-safe and non-thread-safe versions.</p>
-                <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                    Download
-                </button>
-            </div>
-
-            <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
-                    <i data-lucide="download" class="h-8 w-8 text-accent"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Docker Images</h3>
-                <p class="text-muted-foreground mb-6">Official PHP 8.5 Docker images for containerized deployments.</p>
-                <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                    Download
-                </button>
-            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Additional Features -->
+      <div class="mt-16 max-w-4xl mx-auto">
+        <h3 class="text-2xl font-bold mb-8 text-center">Additional New Features</h3>
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">Property Promotion for Final Classes</h4>
+            <p class="text-sm text-muted-foreground">Property promotion is now available for final class constructors</p>
+          </div>
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">Attributes for Constants</h4>
+            <p class="text-sm text-muted-foreground">Constants now support attributes for better metadata</p>
+          </div>
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">#[\Override] for Properties</h4>
+            <p class="text-sm text-muted-foreground">Better validation when overriding parent properties</p>
+          </div>
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">#[\Deprecated] for Traits</h4>
+            <p class="text-sm text-muted-foreground">Mark legacy code with deprecation attributes</p>
+          </div>
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">Asymmetric Visibility</h4>
+            <p class="text-sm text-muted-foreground">Fine-grained control over read/write access for static properties</p>
+          </div>
+          <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="font-semibold mb-2">Handler Introspection</h4>
+            <p class="text-sm text-muted-foreground">New functions for inspecting registered error handlers</p>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Frameworks Bar -->
-<section class="py-12 border-t border-border bg-muted/20">
+  <!-- Timeline Section -->
+  <section id="timeline" class="py-20 sm:py-32 bg-muted/30">
     <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
-            <h3 class="text-lg font-semibold text-muted-foreground">
-                Powered by the best PHP frameworks
-            </h3>
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+          Release Timeline
+        </h2>
+        <p class="text-xl text-muted-foreground">
+          PHP 8.5 development and support schedule
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-border md:left-1/2 z-0"></div>
+
+          <div class="space-y-12">
+            <!-- Phase 1 -->
+            <div class="relative flex items-start gap-8 md:flex-row">
+              <!-- Icon -->
+              <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
+                <i data-lucide="calendar" class="h-7 w-7 text-accent"></i>
+              </div>
+
+              <!-- Content -->
+              <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:mr-[calc(50%+3rem)]">
+                <div class="text-sm font-medium text-accent mb-1">Nov 2025</div>
+                <h3 class="text-xl font-bold mb-1">GA Release</h3>
+                <div class="text-sm font-medium text-muted-foreground mb-3">General Availability</div>
+                <p class="text-muted-foreground">PHP 8.5.0 released with all new features and improvements.</p>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="relative flex items-start gap-8 md:flex-row-reverse">
+              <!-- Icon -->
+              <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
+                <i data-lucide="shield" class="h-7 w-7 text-accent"></i>
+              </div>
+
+              <!-- Content -->
+              <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:ml-[calc(50%+3rem)]">
+                <div class="text-sm font-medium text-accent mb-1">Nov 2027</div>
+                <h3 class="text-xl font-bold mb-1">End of Active Support</h3>
+                <div class="text-sm font-medium text-muted-foreground mb-3">Active Support Ends</div>
+                <p class="text-muted-foreground">Bug fixes and general maintenance will cease. Security fixes only.</p>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="relative flex items-start gap-8 md:flex-row">
+              <!-- Icon -->
+              <div class="flex-shrink-0 w-16 h-16 bg-background border-2 border-border rounded-full flex items-center justify-center relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
+                <i data-lucide="x-circle" class="h-7 w-7 text-accent"></i>
+              </div>
+
+              <!-- Content -->
+              <div class="flex-1 bg-card border border-border rounded-lg p-6 ml-2 md:ml-0 md:mr-[calc(50%+3rem)]">
+                <div class="text-sm font-medium text-accent mb-1">Nov 2028</div>
+                <h3 class="text-xl font-bold mb-1">End of Life</h3>
+                <div class="text-sm font-medium text-muted-foreground mb-3">Security Support Ends</div>
+                <p class="text-muted-foreground">PHP 8.5 reaches end of life. Please upgrade to a newer version.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Migration Section -->
+  <section id="migration" class="py-20 sm:py-32">
+    <div class="container px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+          Migration Guide
+        </h2>
+        <p class="text-xl text-muted-foreground">
+          Upgrading to PHP 8.5 from earlier versions
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto space-y-8">
+        <!-- New Features -->
+        <div class="bg-card border border-border rounded-lg p-8">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
+              <i data-lucide="target" class="h-6 w-6 text-accent"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2">🎯 New Features to Explore</h3>
+            </div>
+          </div>
+          <ul class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Start using the pipe operator for cleaner function chaining</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Replace verbose array access with array_first() and array_last()</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Leverage the new URI extension for standards-compliant URL parsing</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Use clone with syntax for immutable object patterns</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Apply #[\NoDiscard] attribute to critical functions</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent mt-1">•</span>
+              <span>Use first-class callables in attributes for better testing</span>
+            </li>
+          </ul>
         </div>
 
-        <div class="flex flex-wrap justify-center items-center gap-8 max-w-5xl mx-auto">
-            <a
-                    href="https://laravel.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg"
-                            alt="Laravel logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+        <!-- Deprecations -->
+        <div class="bg-card border border-border rounded-lg p-8">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-destructive/10 rounded-lg flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="h-6 w-6 text-destructive"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2">⚠️ Deprecations</h3>
+            </div>
+          </div>
+          <ul class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-destructive mt-1">•</span>
+              <span>Review deprecated features from PHP 8.4 that may be removed</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-destructive mt-1">•</span>
+              <span>Check for warnings in your error logs during testing</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-destructive mt-1">•</span>
+              <span>Plan to update code using deprecated functionality</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Testing -->
+        <div class="bg-card border border-border rounded-lg p-8">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center">
+              <i data-lucide="check-circle-2" class="h-6 w-6 text-green-500"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2">✅ Testing Your Application</h3>
+            </div>
+          </div>
+          <ul class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-green-500 mt-1">•</span>
+              <span>Run your test suite with PHP 8.5 in a staging environment</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-green-500 mt-1">•</span>
+              <span>Enable error reporting to catch any deprecation notices</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-green-500 mt-1">•</span>
+              <span>Update dependencies to versions compatible with PHP 8.5</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-green-500 mt-1">•</span>
+              <span>Review release notes for breaking changes</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Section -->
+  <section id="downloads" class="py-20 sm:py-32 bg-muted/30">
+    <div class="container px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+          Get PHP 8.5
+        </h2>
+        <p class="text-xl text-muted-foreground">
+          Download PHP 8.5 for your platform
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
+            <i data-lucide="code-2" class="h-8 w-8 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Source Code</h3>
+          <p class="text-muted-foreground mb-6">Compile PHP 8.5 from source for maximum flexibility and customization.</p>
+          <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+            Download
+          </button>
+        </div>
+        
+        <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
+            <i data-lucide="monitor" class="h-8 w-8 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Windows</h3>
+          <p class="text-muted-foreground mb-6">Pre-built binaries for Windows, including thread-safe and non-thread-safe versions.</p>
+          <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+            Download
+          </button>
+        </div>
+        
+        <div class="bg-card border border-border rounded-lg p-8 text-center hover:border-accent/50 transition-colors">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
+            <i data-lucide="download" class="h-8 w-8 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Docker Images</h3>
+          <p class="text-muted-foreground mb-6">Official PHP 8.5 Docker images for containerized deployments.</p>
+          <button variant="outline" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frameworks Bar -->
+  <section class="py-12 border-t border-border bg-muted/20">
+    <div class="container px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h3 class="text-lg font-semibold text-muted-foreground">
+          Powered by the best PHP frameworks
+        </h3>
+      </div>
+      
+      <div class="flex flex-wrap justify-center items-center gap-8 max-w-5xl mx-auto">
+        <a
+          href="https://laravel.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" 
+              alt="Laravel logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               Laravel
             </span>
-                </div>
-            </a>
-
-            <a
-                    href="https://symfony.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/symfony/symfony-original.svg"
-                            alt="Symfony logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+          </div>
+        </a>
+        
+        <a
+          href="https://symfony.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/symfony/symfony-original.svg" 
+              alt="Symfony logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               Symfony
             </span>
-                </div>
-            </a>
-
-            <a
-                    href="https://codeigniter.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg"
-                            alt="CodeIgniter logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+          </div>
+        </a>
+        
+        <a
+          href="https://codeigniter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg" 
+              alt="CodeIgniter logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               CodeIgniter
             </span>
-                </div>
-            </a>
-
-            <a
-                    href="https://www.yiiframework.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yii/yii-original.svg"
-                            alt="Yii logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+          </div>
+        </a>
+        
+        <a
+          href="https://www.yiiframework.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yii/yii-original.svg" 
+              alt="Yii logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               Yii
             </span>
-                </div>
-            </a>
-
-            <a
-                    href="https://cakephp.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cakephp/cakephp-original.svg"
-                            alt="CakePHP logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+          </div>
+        </a>
+        
+        <a
+          href="https://cakephp.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cakephp/cakephp-original.svg" 
+              alt="CakePHP logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               CakePHP
             </span>
-                </div>
-            </a>
-
-            <a
-                    href="https://getlaminas.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
-            >
-                <div class="flex items-center gap-3">
-                    <img
-                            src="https://docs.laminas.dev/img/laminas-foundation-rgb.svg"
-                            alt="Laminas logo"
-                            class="h-8 w-8 object-contain"
-                    />
-                    <span class="font-semibold text-sm text-foreground group-hover:text-accent">
+          </div>
+        </a>
+        
+        <a
+          href="https://getlaminas.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative px-6 py-4 rounded-lg bg-card border border-border hover:border-accent/50 transition-all duration-300 hover:scale-105 block"
+        >
+          <div class="flex items-center gap-3">
+            <img 
+              src="https://docs.laminas.dev/img/laminas-foundation-rgb.svg" 
+              alt="Laminas logo"
+              class="h-8 w-8 object-contain"
+            />
+            <span class="font-semibold text-sm text-foreground group-hover:text-accent">
               Laminas
             </span>
-                </div>
-            </a>
-        </div>
+          </div>
+        </a>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="py-12 border-t border-border">
+  <!-- Footer -->
+  <footer class="py-12 border-t border-border">
     <div class="container px-4 sm:px-6 lg:px-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="md:col-span-1">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="font-bold text-lg">PHP 8.5</span>
-                    </div>
-                    <p class="text-muted-foreground text-sm mb-6">
-                        The future of web development with refined developer experience.
-                    </p>
-                    <div class="flex gap-4">
-                        <a
-                                href="#"
-                                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                            <i data-lucide="github" class="h-5 w-5"></i>
-                        </a>
-                        <a
-                                href="#"
-                                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                            <i data-lucide="twitter" class="h-5 w-5"></i>
-                        </a>
-                        <a
-                                href="#"
-                                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                            <i data-lucide="message-circle" class="h-5 w-5"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Documentation</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Getting Started</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Language Reference</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Function Reference</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Security</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Community</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Events</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Meetups</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Contribute</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Mailing Lists</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Resources</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Blog</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Releases</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">License</a></li>
-                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Logos</a></li>
-                    </ul>
-                </div>
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-1">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="font-bold text-lg">PHP 8.5</span>
             </div>
-
-            <div class="border-t border-border mt-12 pt-8 text-center">
-                <p class="text-muted-foreground text-sm">
-                    © 2025 The PHP Group. All rights reserved. PHP is a registered trademark of The PHP Group.
-                </p>
+            <p class="text-muted-foreground text-sm mb-6">
+              The future of web development with refined developer experience.
+            </p>
+            <div class="flex gap-4">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <i data-lucide="github" class="h-5 w-5"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <i data-lucide="twitter" class="h-5 w-5"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <i data-lucide="message-circle" class="h-5 w-5"></i>
+              </a>
             </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">Documentation</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Getting Started</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Language Reference</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Function Reference</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Security</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">Community</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Events</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Meetups</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Contribute</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Mailing Lists</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">Resources</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Blog</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Releases</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">License</a></li>
+              <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm">Logos</a></li>
+            </ul>
+          </div>
         </div>
+        
+        <div class="border-t border-border mt-12 pt-8 text-center">
+          <p class="text-muted-foreground text-sm">
+            © 2025 The PHP Group. All rights reserved. PHP is a registered trademark of The PHP Group.
+          </p>
+        </div>
+      </div>
     </div>
-</footer>
+  </footer>
 
-<!-- Scroll to Top Button -->
-<button id="scroll-to-top" class="fixed bottom-8 right-8 w-10 h-10 rounded-full flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 shadow-lg">
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="fixed bottom-8 right-8 w-10 h-10 rounded-full flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 shadow-lg">
     <i data-lucide="chevron-up" class="h-5 w-5"></i>
-</button>
+  </button>
 
-<!-- JavaScript -->
-<script>
+  <!-- JavaScript -->
+  <script>
     // Initialize Lucide icons after DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize icons
+      // Initialize icons
+      lucide.createIcons();
+      
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const mobileThemeIcon = document.getElementById('mobile-theme-icon');
+      const scrollToTopButton = document.getElementById('scroll-to-top');
+      
+      // Check for saved theme preference or respect system preference
+      const savedTheme = localStorage.getItem('theme');
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const currentTheme = savedTheme || systemTheme;
+      
+      if (currentTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
+        if (mobileThemeIcon) mobileThemeIcon.setAttribute('data-lucide', 'sun');
         lucide.createIcons();
-
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const mobileThemeIcon = document.getElementById('mobile-theme-icon');
-        const scrollToTopButton = document.getElementById('scroll-to-top');
-
-        // Check for saved theme preference or respect system preference
-        const savedTheme = localStorage.getItem('theme');
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        const currentTheme = savedTheme || systemTheme;
-
-        if (currentTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-            if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
-            if (mobileThemeIcon) mobileThemeIcon.setAttribute('data-lucide', 'sun');
-            lucide.createIcons();
-        }
-
-        // Unified theme toggle function
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            if (themeIcon) themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            if (mobileThemeIcon) mobileThemeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            lucide.createIcons();
-        }
-
-        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
-
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        if (mobileMenuToggle && mobileMenu) {
-            mobileMenuToggle.addEventListener('click', () => {
-                const isOpen = !mobileMenu.classList.contains('hidden');
-                if (isOpen) {
-                    mobileMenu.classList.add('hidden');
-                    mobileMenuToggle.innerHTML = '<i data-lucide="menu" class="h-6 w-6"></i>';
-                } else {
-                    mobileMenu.classList.remove('hidden');
-                    mobileMenuToggle.innerHTML = '<i data-lucide="x" class="h-6 w-6"></i>';
-                }
-                lucide.createIcons();
-            });
-        }
-
-        // Search toggle functionality
-        const searchToggle = document.getElementById('search-toggle');
-        const desktopNav = document.getElementById('desktop-nav');
-
-        // Search HTML template
-        const searchTemplate = `
+      }
+      
+      // Unified theme toggle function
+      function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        if (themeIcon) themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        if (mobileThemeIcon) mobileThemeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        lucide.createIcons();
+      }
+      
+      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+      if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+      
+      // Mobile menu toggle
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', () => {
+          const isOpen = !mobileMenu.classList.contains('hidden');
+          if (isOpen) {
+            mobileMenu.classList.add('hidden');
+            mobileMenuToggle.innerHTML = '<i data-lucide="menu" class="h-6 w-6"></i>';
+          } else {
+            mobileMenu.classList.remove('hidden');
+            mobileMenuToggle.innerHTML = '<i data-lucide="x" class="h-6 w-6"></i>';
+          }
+          lucide.createIcons();
+        });
+      }
+      
+      // Search toggle functionality
+      const searchToggle = document.getElementById('search-toggle');
+      const desktopNav = document.getElementById('desktop-nav');
+      
+      // Search HTML template
+      const searchTemplate = `
         <div id="search-container" class="animate-fade-in flex items-center gap-2">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Search documentation..."
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search documentation..." 
             class="w-64 px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground"
             autofocus
           />
@@ -1596,19 +1637,19 @@ var_dump($upcomingRelease);</code></pre>
           </button>
         </div>
       `;
-
-        // Navigation template
-        const navTemplate = `
+      
+      // Navigation template
+      const navTemplate = `
         <a href="#features" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Features</a>
         <a href="#timeline" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Timeline</a>
         <a href="#migration" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Migration</a>
         <a href="#downloads" class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Download</a>
-
+        
         <!-- Search Button -->
         <button id="search-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
           <i data-lucide="search" class="h-5 w-5"></i>
         </button>
-
+        
         <!-- Language Selector -->
         <div class="relative group">
           <button id="language-toggle" class="flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted">
@@ -1623,168 +1664,168 @@ var_dump($upcomingRelease);</code></pre>
             <button class="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-foreground">Italiano</button>
           </div>
         </div>
-
+        
         <!-- Theme Toggle -->
         <button id="theme-toggle" class="p-2 rounded-md text-foreground hover:bg-muted">
           <i data-lucide="moon" class="h-5 w-5" id="theme-icon"></i>
         </button>
       `;
-
-        if (searchToggle && desktopNav) {
-            searchToggle.addEventListener('click', () => {
-                desktopNav.innerHTML = searchTemplate;
-                lucide.createIcons();
-
-                // Add close functionality
-                const closeBtn = document.getElementById('search-close');
-                const newSearchInput = document.getElementById('search-input');
-
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', () => {
-                        desktopNav.innerHTML = navTemplate;
-                        lucide.createIcons();
-                        // Reattach event listeners
-                        attachEventListeners();
-                    });
-                }
-
-                if (newSearchInput) {
-                    newSearchInput.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape') {
-                            desktopNav.innerHTML = navTemplate;
-                            lucide.createIcons();
-                            // Reattach event listeners
-                            attachEventListeners();
-                        }
-                    });
-                }
+      
+      if (searchToggle && desktopNav) {
+        searchToggle.addEventListener('click', () => {
+          desktopNav.innerHTML = searchTemplate;
+          lucide.createIcons();
+          
+          // Add close functionality
+          const closeBtn = document.getElementById('search-close');
+          const newSearchInput = document.getElementById('search-input');
+          
+          if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+              desktopNav.innerHTML = navTemplate;
+              lucide.createIcons();
+              // Reattach event listeners
+              attachEventListeners();
             });
-        }
-
-        // Function to reattach event listeners
-        function attachEventListeners() {
-            // Reattach search toggle
-            const newSearchToggle = document.getElementById('search-toggle');
-            if (newSearchToggle && desktopNav) {
-                newSearchToggle.addEventListener('click', () => {
-                    desktopNav.innerHTML = searchTemplate;
-                    lucide.createIcons();
-
-                    // Add close functionality
-                    const closeBtn = document.getElementById('search-close');
-                    const newSearchInput = document.getElementById('search-input');
-
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', () => {
-                            desktopNav.innerHTML = navTemplate;
-                            lucide.createIcons();
-                            // Reattach event listeners
-                            attachEventListeners();
-                        });
-                    }
-
-                    if (newSearchInput) {
-                        newSearchInput.addEventListener('keydown', (e) => {
-                            if (e.key === 'Escape') {
-                                desktopNav.innerHTML = navTemplate;
-                                lucide.createIcons();
-                                // Reattach event listeners
-                                attachEventListeners();
-                            }
-                        });
-                    }
-                });
-            }
-
-            // Reattach theme toggle
-            const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
-            // Reattach language toggle hover effects
-            const languageToggle = document.getElementById('language-toggle');
-            const languageDropdown = document.getElementById('language-dropdown');
-
-            if (languageToggle && languageDropdown) {
-                languageToggle.addEventListener('mouseenter', () => {
-                    languageDropdown.classList.remove('opacity-0', 'invisible');
-                    languageDropdown.classList.add('opacity-100', 'visible');
-                });
-
-                languageToggle.addEventListener('mouseleave', () => {
-                    languageDropdown.classList.remove('opacity-100', 'visible');
-                    languageDropdown.classList.add('opacity-0', 'invisible');
-                });
-            }
-        }
-
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-
-        window.addEventListener('scroll', () => {
-            if (navbar) {
-                if (window.scrollY > 20) {
-                    navbar.classList.remove('bg-transparent');
-                    navbar.classList.add('bg-background/95', 'backdrop-blur-lg', 'border-b', 'border-border');
-                } else {
-                    navbar.classList.remove('bg-background/95', 'backdrop-blur-lg', 'border-b', 'border-border');
-                    navbar.classList.add('bg-transparent');
-                }
-            }
+          }
+          
+          if (newSearchInput) {
+            newSearchInput.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                desktopNav.innerHTML = navTemplate;
+                lucide.createIcons();
+                // Reattach event listeners
+                attachEventListeners();
+              }
+            });
+          }
         });
-
-        // Scroll to top button
-        window.addEventListener('scroll', () => {
-            if (scrollToTopButton) {
-                if (window.scrollY > 300) {
-                    scrollToTopButton.classList.remove('opacity-0', 'pointer-events-none');
-                    scrollToTopButton.classList.add('opacity-100');
-                } else {
-                    scrollToTopButton.classList.remove('opacity-100');
-                    scrollToTopButton.classList.add('opacity-0', 'pointer-events-none');
-                }
+      }
+      
+      // Function to reattach event listeners
+      function attachEventListeners() {
+        // Reattach search toggle
+        const newSearchToggle = document.getElementById('search-toggle');
+        if (newSearchToggle && desktopNav) {
+          newSearchToggle.addEventListener('click', () => {
+            desktopNav.innerHTML = searchTemplate;
+            lucide.createIcons();
+            
+            // Add close functionality
+            const closeBtn = document.getElementById('search-close');
+            const newSearchInput = document.getElementById('search-input');
+            
+            if (closeBtn) {
+              closeBtn.addEventListener('click', () => {
+                desktopNav.innerHTML = navTemplate;
+                lucide.createIcons();
+                // Reattach event listeners
+                attachEventListeners();
+              });
             }
-        });
-
+            
+            if (newSearchInput) {
+              newSearchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                  desktopNav.innerHTML = navTemplate;
+                  lucide.createIcons();
+                  // Reattach event listeners
+                  attachEventListeners();
+                }
+              });
+            }
+          });
+        }
+        
+        // Reattach theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+        
+        // Reattach language toggle hover effects
+        const languageToggle = document.getElementById('language-toggle');
+        const languageDropdown = document.getElementById('language-dropdown');
+        
+        if (languageToggle && languageDropdown) {
+          languageToggle.addEventListener('mouseenter', () => {
+            languageDropdown.classList.remove('opacity-0', 'invisible');
+            languageDropdown.classList.add('opacity-100', 'visible');
+          });
+          
+          languageToggle.addEventListener('mouseleave', () => {
+            languageDropdown.classList.remove('opacity-100', 'visible');
+            languageDropdown.classList.add('opacity-0', 'invisible');
+          });
+        }
+      }
+      
+      // Navbar scroll effect
+      const navbar = document.getElementById('navbar');
+      
+      window.addEventListener('scroll', () => {
+        if (navbar) {
+          if (window.scrollY > 20) {
+            navbar.classList.remove('bg-transparent');
+            navbar.classList.add('bg-background/95', 'backdrop-blur-lg', 'border-b', 'border-border');
+          } else {
+            navbar.classList.remove('bg-background/95', 'backdrop-blur-lg', 'border-b', 'border-border');
+            navbar.classList.add('bg-transparent');
+          }
+        }
+      });
+      
+      // Scroll to top button
+      window.addEventListener('scroll', () => {
         if (scrollToTopButton) {
-            scrollToTopButton.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+          if (window.scrollY > 300) {
+            scrollToTopButton.classList.remove('opacity-0', 'pointer-events-none');
+            scrollToTopButton.classList.add('opacity-100');
+          } else {
+            scrollToTopButton.classList.remove('opacity-100');
+            scrollToTopButton.classList.add('opacity-0', 'pointer-events-none');
+          }
         }
-
-        // Copy to clipboard functionality
-        window.copyCode = function(elementId, button) {
-            const codeElement = document.getElementById(elementId);
-            if (!codeElement) return;
-
-            const text = codeElement.textContent || '';
-            navigator.clipboard.writeText(text).then(() => {
-                // Show checkmark icon
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<i data-lucide="check" class="h-4 w-4 text-green-500"></i>';
-                lucide.createIcons();
-
-                // Revert after 2 seconds
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    lucide.createIcons();
-                }, 2000);
-            });
+      });
+      
+      if (scrollToTopButton) {
+        scrollToTopButton.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+      
+      // Copy to clipboard functionality
+      window.copyCode = function(elementId, button) {
+        const codeElement = document.getElementById(elementId);
+        if (!codeElement) return;
+        
+        const text = codeElement.textContent || '';
+        navigator.clipboard.writeText(text).then(() => {
+          // Show checkmark icon
+          const originalHTML = button.innerHTML;
+          button.innerHTML = '<i data-lucide="check" class="h-4 w-4 text-green-500"></i>';
+          lucide.createIcons();
+          
+          // Revert after 2 seconds
+          setTimeout(() => {
+            button.innerHTML = originalHTML;
+            lucide.createIcons();
+          }, 2000);
+        });
+      };
+      
+      // Highlight.js initialization
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+      script.onload = function() {
+        // Load PHP language definition
+        const phpScript = document.createElement('script');
+        phpScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js';
+        phpScript.onload = function() {
+          hljs.highlightAll();
         };
-
-        // Highlight.js initialization
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
-        script.onload = function() {
-            // Load PHP language definition
-            const phpScript = document.createElement('script');
-            phpScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js';
-            phpScript.onload = function() {
-                hljs.highlightAll();
-            };
-            document.head.appendChild(phpScript);
-        };
-        document.head.appendChild(script);
+        document.head.appendChild(phpScript);
+      };
+      document.head.appendChild(script);
     });
-</script>
+  </script>
 </body>
 </html>
